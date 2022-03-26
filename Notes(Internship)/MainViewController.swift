@@ -18,7 +18,7 @@ class MainViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        //
         navigationItem.title = "Заметки"
         setupRightBarButton()
         setupViewContainer()
