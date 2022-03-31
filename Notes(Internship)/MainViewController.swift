@@ -16,11 +16,16 @@ class MainViewController: UIViewController {
     private var textIsEditing = true
     private let keyForNote = "note"
     private let keyForTitle = "title"
+    private let navigationTitle = "Заметки"
+    private let doneRightButtonTitle = "Готово"
+    private let changeRightButtonTitle = "Изменить"
+    private let placeholderTitleTextField = "Заголовок страницы"
+    private let emptyValue = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = "Заметки"
+        navigationItem.title = navigationTitle
 
         setupRightBarButton()
         setupViewContainer()
@@ -38,13 +43,13 @@ class MainViewController: UIViewController {
     @objc private func didRightBarButtonTapped(_ sender: Any) {
         textIsEditing.toggle()
         if textIsEditing {
-            rightBarButton.title = "Готово"
+            rightBarButton.title = doneRightButtonTitle
             titleTextField.isUserInteractionEnabled = true
             mainTextField.isUserInteractionEnabled = true
             mainTextField.isEditable = true
             mainTextField.becomeFirstResponder()
         } else {
-            rightBarButton.title = "Изменить"
+            rightBarButton.title = changeRightButtonTitle
             mainTextField.resignFirstResponder()
             titleTextField.isUserInteractionEnabled = false
             mainTextField.isEditable = false
@@ -54,13 +59,13 @@ class MainViewController: UIViewController {
     }
 
     @objc private func applicationWillTerminate(notification: Notification) {
-        UserDefaults.standard.set(mainTextField.text, forKey: "note")
-        UserDefaults.standard.set(titleTextField.text, forKey: "title")
+        UserDefaults.standard.set(mainTextField.text, forKey: keyForNote)
+        UserDefaults.standard.set(titleTextField.text, forKey: keyForTitle)
     }
 
     private func setupRightBarButton() {
         navigationItem.rightBarButtonItem = rightBarButton
-        rightBarButton.title = "Готово"
+        rightBarButton.title = doneRightButtonTitle
         rightBarButton.target = self
         rightBarButton.action = #selector(didRightBarButtonTapped(_:))
     }
@@ -96,8 +101,8 @@ class MainViewController: UIViewController {
         ])
         titleTextField.adjustsFontSizeToFitWidth = false
         titleTextField.font = .systemFont(ofSize: 22.0, weight: .bold)
-        titleTextField.placeholder = "Заголовок страницы"
-        titleTextField.text = UserDefaults.standard.string(forKey: keyForTitle) ?? ""
+        titleTextField.placeholder = placeholderTitleTextField
+        titleTextField.text = UserDefaults.standard.string(forKey: keyForTitle) ?? emptyValue
     }
 
     private func setupMainTextView() {
@@ -111,6 +116,6 @@ class MainViewController: UIViewController {
         ])
         mainTextField.font = .systemFont(ofSize: 14.0, weight: .regular)
         mainTextField.becomeFirstResponder()
-        mainTextField.text = UserDefaults.standard.string(forKey: keyForNote) ?? ""
+        mainTextField.text = UserDefaults.standard.string(forKey: keyForNote) ?? emptyValue
     }
 }
