@@ -8,10 +8,18 @@
 import UIKit
 
 class MainViewController: UIViewController {
+    private var note = Note(
+        titleText: UserDefaults.standard.string(forKey: "title") ?? "",
+        mainText: UserDefaults.standard.string(forKey: "note") ?? "",
+        date: DateFormat.dateToday(day: Date(), formatter: "dd MMMM YYYY")
+    )
+
     private var mainTextField = UITextView()
     private var titleTextField = UITextField()
     private var rightBarButton = UIBarButtonItem()
     private var mainContainer = UIView()
+    private var dateTextField = UITextField()
+    private var datePicker = UIDatePicker()
 
     private var textIsEditing = true
     private let keyForNote = "note"
@@ -24,12 +32,14 @@ class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = .white
 
         navigationItem.title = navigationTitle
 
         setupRightBarButton()
         setupViewContainer()
         setupTitleTextField()
+        setupDateButton()
         setupMainTextView()
 
         NotificationCenter.default.addObserver(
@@ -53,8 +63,12 @@ class MainViewController: UIViewController {
             mainTextField.resignFirstResponder()
             titleTextField.isUserInteractionEnabled = false
             mainTextField.isEditable = false
+            note.titleText = titleTextField.text ?? emptyValue
+            note.mainText = mainTextField.text
             UserDefaults.standard.set(mainTextField.text, forKey: keyForNote)
             UserDefaults.standard.set(titleTextField.text, forKey: keyForTitle)
+            checkEmptyStroke()
+            self.view.endEditing(true)
         }
     }
 
@@ -102,7 +116,7 @@ class MainViewController: UIViewController {
         titleTextField.adjustsFontSizeToFitWidth = false
         titleTextField.font = .systemFont(ofSize: 22.0, weight: .bold)
         titleTextField.placeholder = placeholderTitleTextField
-        titleTextField.text = UserDefaults.standard.string(forKey: keyForTitle) ?? emptyValue
+        titleTextField.text = note.titleText
     }
 
     private func setupMainTextView() {
@@ -111,11 +125,51 @@ class MainViewController: UIViewController {
         NSLayoutConstraint.activate([
             mainTextField.leftAnchor.constraint(equalTo: mainContainer.leftAnchor),
             mainTextField.rightAnchor.constraint(equalTo: mainContainer.rightAnchor),
-            mainTextField.topAnchor.constraint(equalTo: titleTextField.bottomAnchor),
+            mainTextField.topAnchor.constraint(equalTo: dateTextField.bottomAnchor),
             mainTextField.bottomAnchor.constraint(equalTo: mainContainer.bottomAnchor)
         ])
         mainTextField.font = .systemFont(ofSize: 14.0, weight: .regular)
         mainTextField.becomeFirstResponder()
-        mainTextField.text = UserDefaults.standard.string(forKey: keyForNote) ?? emptyValue
+        mainTextField.text = note.mainText
+    }
+
+    private func setupDateButton() {
+        mainContainer.addSubview(dateTextField)
+        dateTextField.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            dateTextField.leftAnchor.constraint(equalTo: mainContainer.leftAnchor),
+            dateTextField.rightAnchor.constraint(equalTo: mainContainer.rightAnchor),
+            dateTextField.topAnchor.constraint(equalTo: titleTextField.bottomAnchor),
+            dateTextField.heightAnchor.constraint(equalToConstant: 30.0)
+        ])
+        dateTextField.placeholder = "Дата: \(note.date ?? "")"
+        dateTextField.textAlignment = .center
+        dateTextField.inputView = datePicker
+        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.datePickerMode = .date
+        datePicker.addTarget(self, action: #selector(changeDate(_:)), for: .valueChanged)
+    }
+
+    @objc private func changeDate(_ sender: UIDatePicker) {
+        let changedDate = DateFormat.changeDateTextField(sender: sender)
+        self.dateTextField.text = "Дата: \(changedDate)"
+    }
+}
+
+extension MainViewController {
+    private func checkEmptyStroke() {
+        if note.isEmpty {
+            let action = UIAlertController(
+                title: "Ошибка",
+                message: "Заполните поля",
+                preferredStyle: .alert
+            )
+            let okAction = UIAlertAction(
+                title: "OK",
+                style: .default
+            )
+            action.addAction(okAction)
+            present(action, animated: true)
+        }
     }
 }
