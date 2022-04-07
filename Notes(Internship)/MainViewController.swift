@@ -51,8 +51,7 @@ class MainViewController: UIViewController {
     @objc private func didRightBarButtonTapped(_ sender: Any) {
         note.titleText = titleTextField.text ?? emptyValue
         note.mainText = mainTextField.text
-        if note.isEmpty {
-            checkEmptyStroke()
+        if checkEmptyStroke() {
         } else {
             textIsEditing.toggle()
             if textIsEditing {
@@ -161,17 +160,22 @@ class MainViewController: UIViewController {
 }
 
 extension MainViewController {
-    private func checkEmptyStroke() {
-        let action = UIAlertController(
-            title: "Ошибка",
-            message: "Заполните поля",
-            preferredStyle: .alert
-        )
-        let okAction = UIAlertAction(
-            title: "OK",
-            style: .default
-        )
-        action.addAction(okAction)
-        present(action, animated: true)
+    private func checkEmptyStroke() -> Bool {
+        if note.isEmpty {
+            let action = UIAlertController(
+                title: "Ошибка",
+                message: "Заполните поля",
+                preferredStyle: .alert
+            )
+            let okAction = UIAlertAction(
+                title: "OK",
+                style: .default
+            )
+            action.addAction(okAction)
+            present(action, animated: true)
+            return true
+        } else {
+            return false
+        }
     }
 }
