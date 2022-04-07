@@ -8,11 +8,11 @@
 import Foundation
 
 struct Note {
-    var titleText: String?
-    var mainText: String?
+    var titleText: String
+    var mainText: String
     var date: String?
     var isEmpty: Bool {
-        if titleText?.isEmpty ?? true && mainText?.isEmpty ?? true {
+        if titleText.isEmpty && mainText.isEmpty {
             return true
         } else {
             return false

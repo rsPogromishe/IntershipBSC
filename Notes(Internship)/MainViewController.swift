@@ -9,9 +9,9 @@ import UIKit
 
 class MainViewController: UIViewController {
     private var note = Note(
-        titleText: UserDefaults.standard.string(forKey: "title") ?? "",
-        mainText: UserDefaults.standard.string(forKey: "note") ?? "",
-        date: DateFormat.dateToday(day: Date(), formatter: "dd MMMM YYYY")
+        titleText: UserDefaults.standard.string(forKey: Constant.keyForTitle) ?? "",
+        mainText: UserDefaults.standard.string(forKey: Constant.keyForNote) ?? "",
+        date: UserDefaults.standard.string(forKey: Constant.keyForDate) ?? ""
     )
 
     private var mainTextField = UITextView()
@@ -22,8 +22,6 @@ class MainViewController: UIViewController {
     private var datePicker = UIDatePicker()
 
     private var textIsEditing = true
-    private let keyForNote = "note"
-    private let keyForTitle = "title"
     private let navigationTitle = "Заметки"
     private let doneRightButtonTitle = "Готово"
     private let changeRightButtonTitle = "Изменить"
@@ -51,30 +49,35 @@ class MainViewController: UIViewController {
     }
 
     @objc private func didRightBarButtonTapped(_ sender: Any) {
-        textIsEditing.toggle()
-        if textIsEditing {
-            rightBarButton.title = doneRightButtonTitle
-            titleTextField.isUserInteractionEnabled = true
-            mainTextField.isUserInteractionEnabled = true
-            mainTextField.isEditable = true
-            mainTextField.becomeFirstResponder()
-        } else {
-            rightBarButton.title = changeRightButtonTitle
-            mainTextField.resignFirstResponder()
-            titleTextField.isUserInteractionEnabled = false
-            mainTextField.isEditable = false
-            note.titleText = titleTextField.text ?? emptyValue
-            note.mainText = mainTextField.text
-            UserDefaults.standard.set(mainTextField.text, forKey: keyForNote)
-            UserDefaults.standard.set(titleTextField.text, forKey: keyForTitle)
+        note.titleText = titleTextField.text ?? emptyValue
+        note.mainText = mainTextField.text
+        if note.isEmpty {
             checkEmptyStroke()
-            self.view.endEditing(true)
+        } else {
+            textIsEditing.toggle()
+            if textIsEditing {
+                rightBarButton.title = doneRightButtonTitle
+                titleTextField.isUserInteractionEnabled = true
+                mainTextField.isUserInteractionEnabled = true
+                mainTextField.isEditable = true
+                mainTextField.becomeFirstResponder()
+            } else {
+                rightBarButton.title = changeRightButtonTitle
+                mainTextField.resignFirstResponder()
+                titleTextField.isUserInteractionEnabled = false
+                mainTextField.isEditable = false
+                UserDefaults.standard.set(mainTextField.text, forKey: Constant.keyForNote)
+                UserDefaults.standard.set(titleTextField.text, forKey: Constant.keyForTitle)
+                UserDefaults.standard.set(dateTextField.text, forKey: Constant.keyForDate)
+                self.view.endEditing(true)
+            }
         }
     }
 
     @objc private func applicationWillTerminate(notification: Notification) {
-        UserDefaults.standard.set(mainTextField.text, forKey: keyForNote)
-        UserDefaults.standard.set(titleTextField.text, forKey: keyForTitle)
+        UserDefaults.standard.set(mainTextField.text, forKey: Constant.keyForNote)
+        UserDefaults.standard.set(titleTextField.text, forKey: Constant.keyForTitle)
+        UserDefaults.standard.set(dateTextField.text, forKey: Constant.keyForDate)
     }
 
     private func setupRightBarButton() {
@@ -142,7 +145,8 @@ class MainViewController: UIViewController {
             dateTextField.topAnchor.constraint(equalTo: titleTextField.bottomAnchor),
             dateTextField.heightAnchor.constraint(equalToConstant: 30.0)
         ])
-        dateTextField.placeholder = "Дата: \(note.date ?? "")"
+        dateTextField.placeholder = "Дата: \(DateFormat.dateToday(day: Date(), formatter: "dd MMMM YYYY"))"
+        dateTextField.text = note.date
         dateTextField.textAlignment = .center
         dateTextField.inputView = datePicker
         datePicker.preferredDatePickerStyle = .wheels
@@ -158,18 +162,16 @@ class MainViewController: UIViewController {
 
 extension MainViewController {
     private func checkEmptyStroke() {
-        if note.isEmpty {
-            let action = UIAlertController(
-                title: "Ошибка",
-                message: "Заполните поля",
-                preferredStyle: .alert
-            )
-            let okAction = UIAlertAction(
-                title: "OK",
-                style: .default
-            )
-            action.addAction(okAction)
-            present(action, animated: true)
-        }
+        let action = UIAlertController(
+            title: "Ошибка",
+            message: "Заполните поля",
+            preferredStyle: .alert
+        )
+        let okAction = UIAlertAction(
+            title: "OK",
+            style: .default
+        )
+        action.addAction(okAction)
+        present(action, animated: true)
     }
 }
