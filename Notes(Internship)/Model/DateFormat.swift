@@ -21,4 +21,14 @@ class DateFormat {
         format.dateFormat = "dd MMMM YYYY"
         return format.string(from: sender.date)
     }
+
+    static func formatterDate(day: String, formatter: String) -> String {
+        let format = DateFormatter()
+        format.dateFormat = formatter
+        format.locale = Locale(identifier: "ru_RU")
+        guard let date = format.date(from: day) else {
+            return ""
+        }
+        return format.string(from: date)
+    }
 }
