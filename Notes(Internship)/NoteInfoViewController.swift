@@ -13,29 +13,22 @@ protocol NoteInfoViewControllerDelegate: AnyObject {
 
 class NoteInfoViewController: UIViewController {
     weak var delegate: NoteInfoViewControllerDelegate?
-//    private var note = Note(
-//        titleText: UserDefaults.standard.string(forKey: Constant.keyForTitle) ?? "",
-//        mainText: UserDefaults.standard.string(forKey: Constant.keyForNote) ?? "",
-//        date: UserDefaults.standard.string(forKey: Constant.keyForDate) ?? ""
-//    )
-    var noteInfo = Note(titleText: "", mainText: "", date: "")
+
+    var noteInfo = Note(titleText: "", mainText: "", date: Date())
+
     private var mainTextField = UITextView()
     private var titleTextField = UITextField()
     private var rightBarButton = UIBarButtonItem()
-    private var leftBarButton = UIBarButtonItem()
     private var mainContainer = UIView()
     private var dateLabel = UILabel()
 
-    private var textIsEditing = true
     private let doneRightButtonTitle = "Готово"
     private let placeholderTitleTextField = "Введите название"
     private let emptyValue = ""
-    private let noteDateFormatter = "dd.MM.YYYY EEEE HH:mm"
-    private let listDateFormatter = "dd.MM.YYYY"
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .secondarySystemBackground
+        self.view.backgroundColor = Constant.screenBackgroundColor
 
         setupBarButtons()
         setupViewContainer()
@@ -51,21 +44,15 @@ class NoteInfoViewController: UIViewController {
         noteInfo = Note(
             titleText: titleTextField.text ?? emptyValue,
             mainText: mainTextField.text,
-            date: DateFormat.dateToday(day: Date(), formatter: listDateFormatter)
+            date: DateFormat.formatterDate(day: dateLabel.text ?? "", formatter: Constant.noteDateFormatter)
         )
-        if !(noteInfo.mainText.isEmpty) {
+        print(noteInfo.date!)
+        if noteInfo.mainText != "" {
             delegate?.saveNote(noteInfo)
         }
     }
 
     private func addObservers() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(applicationWillTerminate(notification:)),
-            name: UIApplication.willTerminateNotification,
-            object: nil
-        )
-
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(showKeyboard),
@@ -74,25 +61,21 @@ class NoteInfoViewController: UIViewController {
         )
     }
 
-    @objc private func applicationWillTerminate(notification: Notification) {
-//        UserDefaults.standard.set(mainTextField.text, forKey: Constant.keyForNote)
-//        UserDefaults.standard.set(titleTextField.text, forKey: Constant.keyForTitle)
-//        UserDefaults.standard.set(dateLabel.text, forKey: Constant.keyForDate)
-    }
-
     @objc private func showKeyboard() {
         rightBarButton.isEnabled = true
         rightBarButton.title = doneRightButtonTitle
+        dateLabel.text = DateFormat.dateToday(day: Date(), formatter: Constant.noteDateFormatter)
         noteInfo = Note(
             titleText: titleTextField.text ?? emptyValue,
             mainText: mainTextField.text,
-            date: dateLabel.text
+            date: DateFormat.formatterDate(day: dateLabel.text ?? "", formatter: Constant.noteDateFormatter)
         )
     }
 
     private func setupBarButtons() {
         navigationItem.rightBarButtonItem = rightBarButton
-        rightBarButton.title = doneRightButtonTitle
+        rightBarButton.title = emptyValue
+        rightBarButton.isEnabled = false
         rightBarButton.target = self
         rightBarButton.style = .plain
         rightBarButton.action = #selector(didRightBarButtonTapped(_:))
@@ -101,7 +84,6 @@ class NoteInfoViewController: UIViewController {
     @objc private func didRightBarButtonTapped(_ sender: Any) {
         noteInfo.titleText = titleTextField.text ?? emptyValue
         noteInfo.mainText = mainTextField.text
-        noteInfo.date = dateLabel.text
         if checkEmptyStroke() {
         } else {
             self.view.endEditing(true)
@@ -110,11 +92,8 @@ class NoteInfoViewController: UIViewController {
             noteInfo = Note(
                 titleText: titleTextField.text ?? emptyValue,
                 mainText: mainTextField.text,
-                date: dateLabel.text
+                date: Date()
             )
-//            UserDefaults.standard.set(mainTextField.text, forKey: Constant.keyForNote)
-//            UserDefaults.standard.set(titleTextField.text, forKey: Constant.keyForTitle)
-//            UserDefaults.standard.set(dateLabel.text, forKey: Constant.keyForDate)
         }
     }
 
@@ -163,10 +142,18 @@ class NoteInfoViewController: UIViewController {
             mainTextField.bottomAnchor.constraint(equalTo: mainContainer.bottomAnchor)
         ])
         mainTextField.font = .systemFont(ofSize: 16.0, weight: .regular)
-        mainTextField.becomeFirstResponder()
         mainTextField.text = noteInfo.mainText
-        mainTextField.backgroundColor = .secondarySystemBackground
+        mainTextField.backgroundColor = Constant.screenBackgroundColor
         mainTextField.adjustableForKeyboard()
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapToMainText(_:)))
+        mainTextField.addGestureRecognizer(tap)
+    }
+
+    @objc func tapToMainText(_ sender: UITapGestureRecognizer) {
+        mainTextField.becomeFirstResponder()
+        let endOfDocument = mainTextField.endOfDocument
+        mainTextField.selectedTextRange = mainTextField.textRange(from: endOfDocument, to: endOfDocument)
     }
 
     private func setupDateButton() {
@@ -179,11 +166,7 @@ class NoteInfoViewController: UIViewController {
             dateLabel.heightAnchor.constraint(equalToConstant: 40.0)
         ])
 
-        if noteInfo.date == "" {
-            dateLabel.text = "\(DateFormat.dateToday(day: Date(), formatter: noteDateFormatter))"
-        } else {
-            dateLabel.text = noteInfo.date
-        }
+        dateLabel.text = "\(DateFormat.dateToday(day: noteInfo.date ?? Date(), formatter: Constant.noteDateFormatter))"
         dateLabel.textAlignment = .center
         dateLabel.font = .systemFont(ofSize: 14, weight: .medium)
         dateLabel.textColor = UIColor(red: 172 / 255, green: 172 / 255, blue: 172 / 255, alpha: 1)

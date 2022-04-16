@@ -16,19 +16,13 @@ class DateFormat {
         return format.string(from: day)
     }
 
-    static func changeDateTextField(sender: UIDatePicker) -> String {
-        let format = DateFormatter()
-        format.dateFormat = "dd MMMM YYYY"
-        return format.string(from: sender.date)
-    }
-
-    static func formatterDate(day: String, formatter: String) -> String {
+    static func formatterDate(day: String, formatter: String) -> Date {
         let format = DateFormatter()
         format.dateFormat = formatter
         format.locale = Locale(identifier: "ru_RU")
         guard let date = format.date(from: day) else {
-            return ""
+            return Date()
         }
-        return format.string(from: date)
+        return date
     }
 }

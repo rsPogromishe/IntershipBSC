@@ -12,9 +12,9 @@ class NoteView: UIView {
     private var note: Note
     private var onCompletion: (Note) -> Void
 
-    private var titleLabel = UILabel()
-    private var textNoteLabel = UILabel()
-    private var dateLabel = UILabel()
+    private let titleLabel = UILabel()
+    private let textNoteLabel = UILabel()
+    private let dateLabel = UILabel()
 
     init(
         frame: CGRect,
@@ -76,6 +76,6 @@ class NoteView: UIView {
         ])
         titleLabel.text = note.titleText
         textNoteLabel.text = note.mainText
-        dateLabel.text = note.date
+        dateLabel.text = DateFormat.dateToday(day: note.date ?? Date(), formatter: Constant.listDateFormatter)
     }
 }

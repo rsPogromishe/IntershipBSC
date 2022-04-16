@@ -21,8 +21,8 @@ class ListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .secondarySystemBackground
-        navigationController?.navigationBar.barTintColor = .secondarySystemBackground
+        self.view.backgroundColor = Constant.screenBackgroundColor
+        navigationController?.navigationBar.barTintColor = Constant.screenBackgroundColor
         navigationItem.title = navigationTitle
         backItem.title = emptyValue
         navigationItem.backBarButtonItem = backItem
@@ -66,7 +66,7 @@ class ListViewController: UIViewController {
         containerView.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            stackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 14),
             stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
             stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
             stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
@@ -86,7 +86,7 @@ class ListViewController: UIViewController {
         self.view.addSubview(addNoteButton)
         NSLayoutConstraint.activate([
             addNoteButton.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -19),
-            addNoteButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -60),
+            addNoteButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -60),
             addNoteButton.widthAnchor.constraint(equalToConstant: 50.0),
             addNoteButton.heightAnchor.constraint(equalToConstant: 50.0)
         ])
@@ -114,10 +114,7 @@ extension ListViewController: NoteInfoViewControllerDelegate {
                 guard let self = self else { return }
                 let editNote = NoteInfoViewController()
                 editNote.noteInfo = note
-                editNote.noteInfo.date = DateFormat.formatterDate(
-                    day: note.date ?? "",
-                    formatter: self.noteDateFormatter
-                )
+                editNote.noteInfo.date = note.date
                 editNote.delegate = self
                 self.navigationController?.show(editNote, sender: nil)
                 self.notes.remove(at: index)
