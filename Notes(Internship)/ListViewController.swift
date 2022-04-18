@@ -16,15 +16,14 @@ class ListViewController: UIViewController {
 
     private let navigationTitle = "Заметки"
     private let emptyValue = ""
-    private let noteDateFormatter = "dd.MM.YYYY EEEE HH:mm"
     var notes: [Note] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = Constant.screenBackgroundColor
-        navigationController?.navigationBar.barTintColor = Constant.screenBackgroundColor
+        self.view.backgroundColor = UIColor(named: Constant.screenBackgroundColor)
+        navigationController?.navigationBar.barTintColor = UIColor(named: Constant.screenBackgroundColor)
         navigationItem.title = navigationTitle
-        backItem.title = emptyValue
+        backItem.title?.removeAll()
         navigationItem.backBarButtonItem = backItem
 
         setupScrollView()

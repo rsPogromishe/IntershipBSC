@@ -8,7 +8,7 @@
 import UIKit
 
 struct Constant {
-    static let screenBackgroundColor = UIColor(red: 249 / 255, green: 250 / 255, blue: 254 / 255, alpha: 1)
-    static let noteDateFormatter = "dd.MM.YYYY EEEE HH:mm"
-    static let listDateFormatter = "dd.MM.YYYY"
+    static let screenBackgroundColor = "BackgroundColor"
+    static let noteDateFormatter = "dd.MM.yyyy EEEE HH:mm"
+    static let listDateFormatter = "dd.MM.yyyy"
 }

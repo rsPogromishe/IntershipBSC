@@ -12,7 +12,7 @@ struct Note {
     var mainText: String
     var date: Date?
     var isEmpty: Bool {
-        if titleText.isEmpty && mainText.isEmpty {
+        if mainText.isEmpty {
             return true
         } else {
             return false

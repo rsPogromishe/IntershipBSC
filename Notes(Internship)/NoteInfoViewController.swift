@@ -28,7 +28,7 @@ class NoteInfoViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = Constant.screenBackgroundColor
+        self.view.backgroundColor = UIColor(named: Constant.screenBackgroundColor)
 
         setupBarButtons()
         setupViewContainer()
@@ -46,8 +46,7 @@ class NoteInfoViewController: UIViewController {
             mainText: mainTextField.text,
             date: DateFormat.formatterDate(day: dateLabel.text ?? "", formatter: Constant.noteDateFormatter)
         )
-        print(noteInfo.date!)
-        if noteInfo.mainText != "" {
+        if noteInfo.isEmpty == false {
             delegate?.saveNote(noteInfo)
         }
     }
@@ -84,11 +83,10 @@ class NoteInfoViewController: UIViewController {
     @objc private func didRightBarButtonTapped(_ sender: Any) {
         noteInfo.titleText = titleTextField.text ?? emptyValue
         noteInfo.mainText = mainTextField.text
-        if checkEmptyStroke() {
-        } else {
+        if checkEmptyStroke() == false {
             self.view.endEditing(true)
             rightBarButton.isEnabled = false
-            rightBarButton.title = emptyValue
+            rightBarButton.title?.removeAll()
             noteInfo = Note(
                 titleText: titleTextField.text ?? emptyValue,
                 mainText: mainTextField.text,
@@ -143,7 +141,7 @@ class NoteInfoViewController: UIViewController {
         ])
         mainTextField.font = .systemFont(ofSize: 16.0, weight: .regular)
         mainTextField.text = noteInfo.mainText
-        mainTextField.backgroundColor = Constant.screenBackgroundColor
+        mainTextField.backgroundColor = UIColor(named: Constant.screenBackgroundColor)
         mainTextField.adjustableForKeyboard()
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapToMainText(_:)))

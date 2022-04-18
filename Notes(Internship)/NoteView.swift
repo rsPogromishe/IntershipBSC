@@ -5,7 +5,6 @@
 //  Created by Снытин Ростислав on 12.04.2022.
 //
 
-import Foundation
 import UIKit
 
 class NoteView: UIView {
@@ -19,10 +18,10 @@ class NoteView: UIView {
     init(
         frame: CGRect,
         note: Note,
-        onCompetion: @escaping (Note) -> Void
+        onCompletion: @escaping (Note) -> Void
     ) {
         self.note = note
-        self.onCompletion = onCompetion
+        self.onCompletion = onCompletion
         super.init(frame: frame)
         setUpView()
         addTapGesture()
