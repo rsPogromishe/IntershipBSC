@@ -7,45 +7,33 @@
 
 import UIKit
 
-class NoteView: UIView {
-    private var note: Note
-    private var onCompletion: (Note) -> Void
+class NoteCell: UITableViewCell {
+    static let cellIdentifier = "cell"
 
     private let titleLabel = UILabel()
     private let textNoteLabel = UILabel()
     private let dateLabel = UILabel()
 
-    init(
-        frame: CGRect,
-        note: Note,
-        onCompletion: @escaping (Note) -> Void
-    ) {
-        self.note = note
-        self.onCompletion = onCompletion
-        super.init(frame: frame)
-        setUpView()
-        addTapGesture()
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        setupCell()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func addTapGesture() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(didTap(_:)))
-        tap.numberOfTapsRequired = 1
-        tap.numberOfTouchesRequired = 1
-        addGestureRecognizer(tap)
-        isUserInteractionEnabled = true
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0))
+        contentView.backgroundColor = .white
+        contentView.layer.cornerRadius = 14
+        sendSubviewToBack(contentView)
     }
 
-    @objc func didTap(_ sender: UITapGestureRecognizer) {
-        onCompletion(note)
-    }
-
-    private func setUpView() {
-        self.layer.cornerRadius = 14
-        self.backgroundColor = .white
+    private func setupCell() {
+        self.backgroundColor = UIColor(named: Constant.screenBackgroundColor)
         titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
         textNoteLabel.font = .systemFont(ofSize: 10, weight: .medium)
         textNoteLabel.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.675, alpha: 1)
@@ -59,20 +47,23 @@ class NoteView: UIView {
         addSubview(dateLabel)
 
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: 90.0),
+            heightAnchor.constraint(equalToConstant: 94.0),
 
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 14),
             titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 16),
             titleLabel.heightAnchor.constraint(equalToConstant: 18.0),
 
-            textNoteLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+            textNoteLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 3),
             textNoteLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 16),
             textNoteLabel.heightAnchor.constraint(equalToConstant: 14.0),
 
-            dateLabel.topAnchor.constraint(equalTo: textNoteLabel.bottomAnchor, constant: 24),
+            dateLabel.topAnchor.constraint(equalTo: textNoteLabel.bottomAnchor, constant: 26),
             dateLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 16),
             dateLabel.heightAnchor.constraint(equalToConstant: 10.0)
         ])
+    }
+
+    func configure(note: Note) {
         titleLabel.text = note.titleText
         textNoteLabel.text = note.mainText
         dateLabel.text = DateFormat.dateToday(day: note.date ?? Date(), formatter: Constant.listDateFormatter)
