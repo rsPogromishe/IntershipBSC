@@ -5,10 +5,10 @@
 //  Created by Снытин Ростислав on 07.04.2022.
 //
 
-import Foundation
+import UIKit
 
 struct Constant {
-    static let keyForNote = "note"
-    static let keyForTitle = "title"
-    static let keyForDate = "date"
+    static let screenBackgroundColor = "BackgroundColor"
+    static let noteDateFormatter = "dd.MM.yyyy EEEE HH:mm"
+    static let listDateFormatter = "dd.MM.yyyy"
 }

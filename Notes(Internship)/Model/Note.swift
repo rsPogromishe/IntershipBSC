@@ -10,9 +10,9 @@ import Foundation
 struct Note {
     var titleText: String
     var mainText: String
-    var date: String?
+    var date: Date?
     var isEmpty: Bool {
-        if titleText.isEmpty && mainText.isEmpty {
+        if mainText.isEmpty {
             return true
         } else {
             return false
