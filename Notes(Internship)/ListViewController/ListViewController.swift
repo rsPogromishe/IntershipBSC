@@ -14,10 +14,16 @@ class ListViewController: UIViewController {
 
     private let navigationTitle = "Заметки"
     private let emptyValue = ""
-    var notes: [Note] = []
+    var notes: [Note] = [] {
+        didSet {
+            notes = notes.sorted(by: { $0.date ?? Date() > $1.date ?? Date() })
+           }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        notes = NoteStorage().loadNotes()
+
         self.view.backgroundColor = UIColor(named: Constant.screenBackgroundColor)
         navigationController?.navigationBar.barTintColor = UIColor(named: Constant.screenBackgroundColor)
         navigationItem.title = navigationTitle
@@ -95,6 +101,7 @@ extension ListViewController: UITableViewDataSource {
     ) {
         if editingStyle == .delete {
             notes.remove(at: indexPath.row)
+            NoteStorage().saveNotes(notes)
             self.tableView.reloadData()
         }
     }
@@ -105,14 +112,16 @@ extension ListViewController: UITableViewDelegate {
         let noteVC = NoteInfoViewController()
         noteVC.delegate = self
         noteVC.noteInfo = notes[indexPath.row]
+        noteVC.noteIndex = indexPath.row
         notes.remove(at: indexPath.row)
         self.navigationController?.pushViewController(noteVC, animated: true)
     }
 }
 
 extension ListViewController: NoteInfoViewControllerDelegate {
-    func saveNote(_ note: Note) {
-        self.notes.append(note)
+    func saveNote(_ note: Note, index: Int) {
+        self.notes.insert(note, at: index)
         self.tableView.reloadData()
+        NoteStorage().saveNotes(notes)
     }
 }

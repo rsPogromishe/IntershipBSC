@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		58474D8C27F9A31D00A9B289 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58474D8B27F9A31D00A9B289 /* Note.swift */; };
 		58474D8E27F9B22C00A9B289 /* DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58474D8D27F9B22C00A9B289 /* DateFormat.swift */; };
+		5874376A28117AF2009A604E /* NoteStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5874376928117AF2009A604E /* NoteStorage.swift */; };
 		58BE438D280579D9005A2181 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BE438C280579D9005A2181 /* ListViewController.swift */; };
 		58BE439028057AF4005A2181 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BE438F28057AF4005A2181 /* NoteCell.swift */; };
 		58BE43922805F164005A2181 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BE43912805F164005A2181 /* Extensions.swift */; };
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		58474D8B27F9A31D00A9B289 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		58474D8D27F9B22C00A9B289 /* DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormat.swift; sourceTree = "<group>"; };
+		5874376928117AF2009A604E /* NoteStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteStorage.swift; sourceTree = "<group>"; };
 		58BE438C280579D9005A2181 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		58BE438F28057AF4005A2181 /* NoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NoteCell.swift; path = ../NoteCell.swift; sourceTree = "<group>"; };
 		58BE43912805F164005A2181 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 			isa = PBXGroup;
 			children = (
 				58474D8B27F9A31D00A9B289 /* Note.swift */,
+				5874376928117AF2009A604E /* NoteStorage.swift */,
 				58474D8D27F9B22C00A9B289 /* DateFormat.swift */,
 				58DF69CF27FEE27100990875 /* Constant.swift */,
 				58BE43912805F164005A2181 /* Extensions.swift */,
@@ -222,6 +225,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				58D41E8527EF52AB002958FC /* NoteInfoViewController.swift in Sources */,
+				5874376A28117AF2009A604E /* NoteStorage.swift in Sources */,
 				58BE43922805F164005A2181 /* Extensions.swift in Sources */,
 				58D41E8127EF52AB002958FC /* AppDelegate.swift in Sources */,
 				58BE439028057AF4005A2181 /* NoteCell.swift in Sources */,
