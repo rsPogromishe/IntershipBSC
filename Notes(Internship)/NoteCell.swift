@@ -10,6 +10,7 @@ import UIKit
 class NoteCell: UITableViewCell {
     static let cellIdentifier = "cell"
 
+    private let conteinerView = UIView()
     private let titleLabel = UILabel()
     private let textNoteLabel = UILabel()
     private let dateLabel = UILabel()
@@ -30,6 +31,10 @@ class NoteCell: UITableViewCell {
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 14
         sendSubviewToBack(contentView)
+
+        conteinerView.layer.cornerRadius = 14
+        conteinerView.backgroundColor = .white
+        sendSubviewToBack(conteinerView)
     }
 
     private func setupCell() {
@@ -42,23 +47,30 @@ class NoteCell: UITableViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         textNoteLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        conteinerView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(titleLabel)
         addSubview(textNoteLabel)
         addSubview(dateLabel)
+        addSubview(conteinerView)
 
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: 94.0),
+            contentView.heightAnchor.constraint(equalToConstant: 94.0),
+
+            conteinerView.leftAnchor.constraint(equalTo: leftAnchor),
+            conteinerView.rightAnchor.constraint(equalTo: rightAnchor),
+            conteinerView.topAnchor.constraint(equalTo: topAnchor, constant: 4),
+            conteinerView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 14),
-            titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 16),
+            titleLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
             titleLabel.heightAnchor.constraint(equalToConstant: 18.0),
 
             textNoteLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 3),
-            textNoteLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 16),
+            textNoteLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
             textNoteLabel.heightAnchor.constraint(equalToConstant: 14.0),
 
             dateLabel.topAnchor.constraint(equalTo: textNoteLabel.bottomAnchor, constant: 26),
-            dateLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 16),
+            dateLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
             dateLabel.heightAnchor.constraint(equalToConstant: 10.0)
         ])
     }
