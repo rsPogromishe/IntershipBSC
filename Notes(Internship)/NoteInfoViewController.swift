@@ -8,13 +8,14 @@
 import UIKit
 
 protocol NoteInfoViewControllerDelegate: AnyObject {
-    func saveNote(_ note: Note)
+    func saveNote(_ note: Note, index: Int)
 }
 
 class NoteInfoViewController: UIViewController {
     weak var delegate: NoteInfoViewControllerDelegate?
 
     var noteInfo = Note(titleText: "", mainText: "", date: Date())
+    var noteIndex = 0
 
     private var mainTextField = UITextView()
     private var titleTextField = UITextField()
@@ -44,10 +45,10 @@ class NoteInfoViewController: UIViewController {
         noteInfo = Note(
             titleText: titleTextField.text ?? emptyValue,
             mainText: mainTextField.text,
-            date: DateFormat.formatterDate(day: dateLabel.text ?? "", formatter: Constant.noteDateFormatter)
+            date: DateFormat.formatterDate(day: dateLabel.text ?? emptyValue, formatter: Constant.noteDateFormatter)
         )
         if noteInfo.isEmpty == false {
-            delegate?.saveNote(noteInfo)
+            delegate?.saveNote(noteInfo, index: noteIndex)
         }
     }
 
@@ -56,6 +57,13 @@ class NoteInfoViewController: UIViewController {
             self,
             selector: #selector(showKeyboard),
             name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(applicationWillTerminate(notification:)),
+            name: UIApplication.willTerminateNotification,
             object: nil
         )
     }
@@ -67,8 +75,21 @@ class NoteInfoViewController: UIViewController {
         noteInfo = Note(
             titleText: titleTextField.text ?? emptyValue,
             mainText: mainTextField.text,
-            date: DateFormat.formatterDate(day: dateLabel.text ?? "", formatter: Constant.noteDateFormatter)
+            date: DateFormat.formatterDate(day: dateLabel.text ?? emptyValue, formatter: Constant.noteDateFormatter)
         )
+    }
+
+    @objc private func applicationWillTerminate(notification: Notification) {
+        var newNote: [Note] = []
+        noteInfo = Note(
+            titleText: titleTextField.text ?? emptyValue,
+            mainText: mainTextField.text,
+            date: DateFormat.formatterDate(day: dateLabel.text ?? emptyValue, formatter: Constant.noteDateFormatter)
+        )
+        newNote.append(noteInfo)
+        if noteInfo.isEmpty == false {
+            NoteStorage().saveNotes(newNote)
+        }
     }
 
     private func setupBarButtons() {

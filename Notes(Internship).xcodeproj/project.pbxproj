@@ -9,8 +9,9 @@
 /* Begin PBXBuildFile section */
 		58474D8C27F9A31D00A9B289 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58474D8B27F9A31D00A9B289 /* Note.swift */; };
 		58474D8E27F9B22C00A9B289 /* DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58474D8D27F9B22C00A9B289 /* DateFormat.swift */; };
+		5874376A28117AF2009A604E /* NoteStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5874376928117AF2009A604E /* NoteStorage.swift */; };
 		58BE438D280579D9005A2181 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BE438C280579D9005A2181 /* ListViewController.swift */; };
-		58BE439028057AF4005A2181 /* NoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BE438F28057AF4005A2181 /* NoteView.swift */; };
+		58BE439028057AF4005A2181 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BE438F28057AF4005A2181 /* NoteCell.swift */; };
 		58BE43922805F164005A2181 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BE43912805F164005A2181 /* Extensions.swift */; };
 		58D41E8127EF52AB002958FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D41E8027EF52AB002958FC /* AppDelegate.swift */; };
 		58D41E8327EF52AB002958FC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D41E8227EF52AB002958FC /* SceneDelegate.swift */; };
@@ -23,8 +24,9 @@
 /* Begin PBXFileReference section */
 		58474D8B27F9A31D00A9B289 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		58474D8D27F9B22C00A9B289 /* DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormat.swift; sourceTree = "<group>"; };
+		5874376928117AF2009A604E /* NoteStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteStorage.swift; sourceTree = "<group>"; };
 		58BE438C280579D9005A2181 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
-		58BE438F28057AF4005A2181 /* NoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteView.swift; sourceTree = "<group>"; };
+		58BE438F28057AF4005A2181 /* NoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NoteCell.swift; path = ../NoteCell.swift; sourceTree = "<group>"; };
 		58BE43912805F164005A2181 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		58D41E7D27EF52AB002958FC /* Notes(Internship).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Notes(Internship).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		58D41E8027EF52AB002958FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -50,8 +52,8 @@
 		58474D8927F9A2E900A9B289 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				58D41E8427EF52AB002958FC /* NoteInfoViewController.swift */,
-				58BE438C280579D9005A2181 /* ListViewController.swift */,
+				5874376828112B0F009A604E /* NoteInfoViewController */,
+				5874376628112AE3009A604E /* ListViewController */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -60,6 +62,7 @@
 			isa = PBXGroup;
 			children = (
 				58474D8B27F9A31D00A9B289 /* Note.swift */,
+				5874376928117AF2009A604E /* NoteStorage.swift */,
 				58474D8D27F9B22C00A9B289 /* DateFormat.swift */,
 				58DF69CF27FEE27100990875 /* Constant.swift */,
 				58BE43912805F164005A2181 /* Extensions.swift */,
@@ -67,10 +70,34 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		5874376628112AE3009A604E /* ListViewController */ = {
+			isa = PBXGroup;
+			children = (
+				58BE438C280579D9005A2181 /* ListViewController.swift */,
+				5874376728112AF6009A604E /* Cells */,
+			);
+			path = ListViewController;
+			sourceTree = "<group>";
+		};
+		5874376728112AF6009A604E /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				58BE438F28057AF4005A2181 /* NoteCell.swift */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		5874376828112B0F009A604E /* NoteInfoViewController */ = {
+			isa = PBXGroup;
+			children = (
+				58D41E8427EF52AB002958FC /* NoteInfoViewController.swift */,
+			);
+			name = NoteInfoViewController;
+			sourceTree = "<group>";
+		};
 		58BE438E28057AE5005A2181 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				58BE438F28057AF4005A2181 /* NoteView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -198,9 +225,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				58D41E8527EF52AB002958FC /* NoteInfoViewController.swift in Sources */,
+				5874376A28117AF2009A604E /* NoteStorage.swift in Sources */,
 				58BE43922805F164005A2181 /* Extensions.swift in Sources */,
 				58D41E8127EF52AB002958FC /* AppDelegate.swift in Sources */,
-				58BE439028057AF4005A2181 /* NoteView.swift in Sources */,
+				58BE439028057AF4005A2181 /* NoteCell.swift in Sources */,
 				58D41E8327EF52AB002958FC /* SceneDelegate.swift in Sources */,
 				58474D8E27F9B22C00A9B289 /* DateFormat.swift in Sources */,
 				58474D8C27F9A31D00A9B289 /* Note.swift in Sources */,
