@@ -23,9 +23,9 @@ class ListViewController: UIViewController {
             notes = notes.sorted(by: { $0.date ?? Date() > $1.date ?? Date() })
            }
     }
-    var indecis: [Int] = [] {
+    var indices: [Int] = [] {
         didSet {
-            indecis = indecis.sorted(by: { $0 > $1 })
+            indices = indices.sorted(by: { $0 > $1 })
         }
     }
 
@@ -53,7 +53,7 @@ class ListViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        setupAnimation()
+        buttonAppearAnimation()
     }
 
     private func setupNavigationBar() {
@@ -70,7 +70,7 @@ class ListViewController: UIViewController {
     }
 
     @objc private func didRightBarButtonTapped(_ sender: Any) {
-        indecis.removeAll()
+        indices.removeAll()
         tableView.setEditing(!tableView.isEditing, animated: true)
         if tableView.isEditing {
             rightBarButton.title = doneRightButtonTitle
@@ -125,7 +125,7 @@ class ListViewController: UIViewController {
 
     @objc private func buttonTapped(_ sender: Any) {
         if tableView.isEditing {
-            if indecis.isEmpty {
+            if indices.isEmpty {
                 let action = UIAlertController(
                     title: "Ошибка",
                     message: "Вы не выбрали ни одной заметки",
@@ -138,49 +138,15 @@ class ListViewController: UIViewController {
                 action.addAction(okAction)
                 present(action, animated: true)
             } else {
-                UIView.animate(
-                    withDuration: 0.5,
-                    animations: { [weak self] in
-                        guard let self = self else { return }
-                        self.indecis.forEach({
-                            self.notes.remove(
-                                at: $0
-                            ); let index = IndexPath(
-                                row: $0,
-                                section: 0
-                            ); self.tableView.deleteRows(
-                                at: [index],
-                                with: .right
-                            )
-                        })
-                    }, completion: { [weak self] _ in
-                        guard let self = self else { return }
-                        self.tableView.reloadData()
-                        self.tableView.isEditing = false
-                        self.changeButtonFunctionAnimation()
-                    }
-                )
+                deleteRowsButtonAnimation()
                 NoteStorage().saveNotes(notes)
             }
         } else {
-            UIView.animateKeyframes(
-                withDuration: 1,
-                delay: 0,
-                options: [.layoutSubviews],
-                animations: { [weak self] in
-                    guard let self = self else { return }
-                    self.addButtonKeyFrames()
-                }, completion: { [weak self] _ in
-                    guard let self = self else { return }
-                    let newNote = NoteInfoViewController()
-                    newNote.delegate = self
-                    self.navigationController?.pushViewController(newNote, animated: true)
-                }
-            )
+            pushVCButtonAnimation()
         }
     }
 
-    private func setupAnimation() {
+    private func buttonAppearAnimation() {
         UIView.animate(
             withDuration: 1,
             delay: 0,
@@ -196,11 +162,29 @@ class ListViewController: UIViewController {
                 )
                 self.secondButtonConst?.isActive = true
                 self.view.layoutSubviews()
-            }, completion: nil
+            }
         )
     }
 
-    private func addButtonKeyFrames() {
+    private func pushVCButtonAnimation() {
+        UIView.animateKeyframes(
+            withDuration: 1,
+            delay: 0,
+            options: [.layoutSubviews],
+            animations: { [weak self] in
+                guard let self = self else { return }
+                self.pushVCButtonAnimationKeyFrames()
+            },
+            completion: { [weak self] _ in
+                guard let self = self else { return }
+                let newNote = NoteInfoViewController()
+                newNote.delegate = self
+                self.navigationController?.pushViewController(newNote, animated: true)
+            }
+        )
+    }
+
+    private func pushVCButtonAnimationKeyFrames() {
         UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.25) { [weak self] in
             guard let self = self else { return }
             self.addNoteButton.layer.position.y -= 75
@@ -220,7 +204,27 @@ class ListViewController: UIViewController {
             animations: { [weak self] in
                 guard let self = self else { return }
                 self.addNoteButton.setImage(UIImage(named: Constant.addButtonImage), for: .normal)
-            }, completion: nil
+            }
+        )
+    }
+
+    private func deleteRowsButtonAnimation() {
+        UIView.animate(
+            withDuration: 0.5,
+            animations: { [weak self] in
+                guard let self = self else { return }
+                self.indices.forEach({
+                    self.notes.remove(at: $0)
+                    let index = IndexPath(row: $0, section: 0)
+                    self.tableView.deleteRows(at: [index], with: .right)
+                })
+            },
+            completion: { [weak self] _ in
+                guard let self = self else { return }
+                self.tableView.reloadData()
+                self.tableView.isEditing = false
+                self.changeButtonFunctionAnimation()
+            }
         )
     }
 }
@@ -271,7 +275,7 @@ extension ListViewController: UITableViewDataSource {
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.isEditing {
-            indecis.append(indexPath.row)
+            indices.append(indexPath.row)
         } else {
             let noteVC = NoteInfoViewController()
             noteVC.delegate = self
@@ -283,7 +287,7 @@ extension ListViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        indecis.removeAll(where: { $0 == indexPath.row })
+        indices.removeAll(where: { $0 == indexPath.row })
     }
 }
 
