@@ -13,4 +13,6 @@ struct Constant {
     static let listDateFormatter = "dd.MM.yyyy"
     static let addButtonImage = "addButton"
     static let deleteButtonImage = "deleteButton"
+    static let selectCellCheckbox = "selectCell"
+    static let deselectCellCheckbox = "deselectCell"
 }

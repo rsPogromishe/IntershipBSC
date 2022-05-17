@@ -23,7 +23,8 @@ class ListViewController: UIViewController {
             notes = notes.sorted(by: { $0.date ?? Date() > $1.date ?? Date() })
            }
     }
-    var indices: [Int] = [] {
+
+    private var indices: [Int] = [] {
         didSet {
             indices = indices.sorted(by: { $0 > $1 })
         }
@@ -145,7 +146,84 @@ class ListViewController: UIViewController {
             pushVCButtonAnimation()
         }
     }
+}
 
+extension ListViewController: UITableViewDataSource {
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
+    ) -> Int {
+        notes.count
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(
+            withIdentifier: NoteCell.cellIdentifier,
+            for: indexPath
+        ) as? NoteCell {
+            cell.configure(note: notes[indexPath.row])
+            cell.selectionStyle = .none
+            return cell
+        }
+        return UITableViewCell()
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath
+    ) {
+        if editingStyle == .delete {
+            notes.remove(at: indexPath.row)
+            NoteStorage().saveNotes(notes)
+            tableView.deleteRows(at: [indexPath], with: .right)
+            tableView.reloadData()
+        }
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        shouldIndentWhileEditingRowAt indexPath: IndexPath
+    ) -> Bool {
+        return false
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 94
+    }
+}
+
+extension ListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.isEditing {
+            indices.append(indexPath.row)
+        } else {
+            let noteVC = NoteInfoViewController()
+            noteVC.delegate = self
+            noteVC.noteInfo = notes[indexPath.row]
+            noteVC.noteIndex = indexPath.row
+            notes.remove(at: indexPath.row)
+            self.navigationController?.pushViewController(noteVC, animated: true)
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        indices.removeAll(where: { $0 == indexPath.row })
+    }
+}
+
+extension ListViewController: NoteInfoViewControllerDelegate {
+    func saveNote(_ note: Note, index: Int) {
+        self.notes.insert(note, at: index)
+        self.tableView.reloadData()
+        NoteStorage().saveNotes(notes)
+    }
+}
+
+extension ListViewController {
     private func buttonAppearAnimation() {
         UIView.animate(
             withDuration: 1,
@@ -226,75 +304,5 @@ class ListViewController: UIViewController {
                 self.changeButtonFunctionAnimation()
             }
         )
-    }
-}
-
-extension ListViewController: UITableViewDataSource {
-    func tableView(
-        _ tableView: UITableView,
-        numberOfRowsInSection section: Int
-    ) -> Int {
-        notes.count
-    }
-
-    func tableView(
-        _ tableView: UITableView,
-        cellForRowAt indexPath: IndexPath
-    ) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(
-            withIdentifier: NoteCell.cellIdentifier,
-            for: indexPath
-        ) as? NoteCell {
-            cell.configure(note: notes[indexPath.row])
-            return cell
-        }
-        return UITableViewCell()
-    }
-
-    func tableView(
-        _ tableView: UITableView,
-        commit editingStyle: UITableViewCell.EditingStyle,
-        forRowAt indexPath: IndexPath
-    ) {
-        if editingStyle == .delete {
-            notes.remove(at: indexPath.row)
-            NoteStorage().saveNotes(notes)
-            tableView.deleteRows(at: [indexPath], with: .right)
-            tableView.reloadData()
-        }
-    }
-
-    func tableView(
-        _ tableView: UITableView,
-        shouldIndentWhileEditingRowAt indexPath: IndexPath
-    ) -> Bool {
-        return false
-    }
-}
-
-extension ListViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.isEditing {
-            indices.append(indexPath.row)
-        } else {
-            let noteVC = NoteInfoViewController()
-            noteVC.delegate = self
-            noteVC.noteInfo = notes[indexPath.row]
-            noteVC.noteIndex = indexPath.row
-            notes.remove(at: indexPath.row)
-            self.navigationController?.pushViewController(noteVC, animated: true)
-        }
-    }
-
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        indices.removeAll(where: { $0 == indexPath.row })
-    }
-}
-
-extension ListViewController: NoteInfoViewControllerDelegate {
-    func saveNote(_ note: Note, index: Int) {
-        self.notes.insert(note, at: index)
-        self.tableView.reloadData()
-        NoteStorage().saveNotes(notes)
     }
 }
