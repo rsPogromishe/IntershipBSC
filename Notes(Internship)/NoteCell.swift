@@ -14,22 +14,15 @@ class NoteCell: UITableViewCell {
     private let titleLabel = UILabel()
     private let textNoteLabel = UILabel()
     private let dateLabel = UILabel()
-    var imageView1 = UIImageView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         setupCell()
-        let viewS = UIView()
-        self.backgroundView = viewS
-        viewS.addSubview(imageView1)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func willTransition(to state: UITableViewCell.StateMask) {
     }
 
     override func layoutSubviews() {
@@ -37,20 +30,12 @@ class NoteCell: UITableViewCell {
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0))
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 14
+        sendSubviewToBack(contentView)
 
-        layer.cornerRadius = 14
-        backgroundColor = .white
-
-        //setupCellCheckbox()
-        if isEditing {
-            imageView1.frame = CGRect(x: 19, y: 33, width: 16, height: 16)
-            imageView1.clipsToBounds = true
-            if isSelected {
-                imageView1.image = UIImage(named: Constant.selectCellCheckbox)
-            } else {
-                imageView1.image = UIImage(named: Constant.deselectCellCheckbox)
-            }
-        }
+        conteinerView.layer.cornerRadius = 14
+        conteinerView.backgroundColor = .white
+        sendSubviewToBack(conteinerView)
+        setupCellCheckbox()
     }
 
     private func setupCell() {
@@ -63,24 +48,21 @@ class NoteCell: UITableViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         textNoteLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        //conteinerView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(textNoteLabel)
-        contentView.addSubview(dateLabel)
-        //addSubview(conteinerView)
-        imageView1.translatesAutoresizingMaskIntoConstraints = false
-        //addSubview(imageView1)
-        //self.backgroundView?.addSubview(imageView1)
+        conteinerView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(titleLabel)
+        addSubview(textNoteLabel)
+        addSubview(dateLabel)
+        addSubview(conteinerView)
 
         NSLayoutConstraint.activate([
             contentView.heightAnchor.constraint(equalToConstant: 94.0),
 
-//            view.leftAnchor.constraint(equalTo: backView.leftAnchor),
-//            view.rightAnchor.constraint(equalTo: backView.rightAnchor),
-//            view.topAnchor.constraint(equalTo: backView.topAnchor),
-//            view.bottomAnchor.constraint(equalTo: backView.bottomAnchor),
+            conteinerView.leftAnchor.constraint(equalTo: leftAnchor),
+            conteinerView.rightAnchor.constraint(equalTo: rightAnchor),
+            conteinerView.topAnchor.constraint(equalTo: topAnchor, constant: 4),
+            conteinerView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 14),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 14),
             titleLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
             titleLabel.heightAnchor.constraint(equalToConstant: 18.0),
 
@@ -91,11 +73,6 @@ class NoteCell: UITableViewCell {
             dateLabel.topAnchor.constraint(equalTo: textNoteLabel.bottomAnchor, constant: 26),
             dateLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
             dateLabel.heightAnchor.constraint(equalToConstant: 10.0)
-
-//            imageView1.leftAnchor.constraint(equalTo: self.backgroundView?.leftAnchor ?? leftAnchor, constant: 6),
-//            imageView1.topAnchor.constraint(equalTo: self.backgroundView?.topAnchor ?? topAnchor, constant: 10),
-//            imageView1.heightAnchor.constraint(equalToConstant: 21.67),
-//            imageView1.widthAnchor.constraint(equalToConstant: 21.67)
         ])
     }
 
