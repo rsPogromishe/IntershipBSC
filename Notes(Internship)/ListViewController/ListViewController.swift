@@ -33,9 +33,12 @@ class ListViewController: UIViewController {
     private var firstButtonConst: NSLayoutConstraint?
     private var secondButtonConst: NSLayoutConstraint?
 
+    private var manager = NetworkManager()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         notes = NoteStorage().loadNotes()
+        fetchNotes()
 
         self.view.backgroundColor = UIColor(named: Constant.screenBackgroundColor)
 
@@ -304,5 +307,27 @@ extension ListViewController {
                 self.changeButtonFunctionAnimation()
             }
         )
+    }
+}
+
+extension ListViewController {
+    private func fetchNotes() {
+        manager.onCompletion = { [weak self] response in
+            guard let self = self else { return }
+            switch response {
+            case .onSuccess(let note):
+                DispatchQueue.main.async {
+                    if !self.notes.elementsEqual(note, by: {
+                        $0.mainText == $1.mainText && $0.titleText == $1.titleText && $0.date == $1.date
+                    }) {
+                        self.notes += note
+                    }
+                    self.tableView.reloadData()
+                }
+            case .onError(let error):
+                print(error)
+            }
+        }
+        manager.fetchQuote()
     }
 }
