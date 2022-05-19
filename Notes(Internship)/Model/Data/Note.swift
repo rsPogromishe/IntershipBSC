@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Note {
+struct Note: Codable {
     var titleText: String
     var mainText: String
     var date: Date?
@@ -17,5 +17,10 @@ struct Note {
         } else {
             return false
         }
+    }
+    enum CodingKeys: String, CodingKey {
+        case titleText = "header"
+        case mainText = "text"
+        case date = "date"
     }
 }
