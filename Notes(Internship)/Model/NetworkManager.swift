@@ -13,28 +13,15 @@ enum Response {
 }
 
 class NetworkManager {
-<<<<<<< Updated upstream
-    var onCompletion: ((Response) -> Void)?
-
-    func fetchQuote() {
-=======
     func fetchData(onCompletion: @escaping ((Response) -> Void)) {
->>>>>>> Stashed changes
         guard let url = createURLcomponents() else { return }
         URLSession.shared.dataTask(with: url) { data, _, error in
             if let data = data {
                 if let note = self.parseJSON(withData: data) {
-<<<<<<< Updated upstream
-                    self.onCompletion?(.onSuccess(note: note))
-                }
-            } else if let error = error {
-                self.onCompletion?(.onError(error: error))
-=======
                     onCompletion(.onSuccess(note: note))
                 }
             } else if let error = error {
                 onCompletion(.onError(error: error))
->>>>>>> Stashed changes
             }
         }.resume()
     }
