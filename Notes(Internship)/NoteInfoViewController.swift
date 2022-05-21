@@ -27,6 +27,8 @@ class NoteInfoViewController: UIViewController {
     private let placeholderTitleTextField = "Введите название"
     private let emptyValue = ""
 
+    private var editDate: Date?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(named: Constant.screenBackgroundColor)
@@ -42,12 +44,7 @@ class NoteInfoViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        noteInfo = Note(
-            titleText: titleTextField.text ?? emptyValue,
-            mainText: mainTextField.text,
-            date: DateFormat.formatterDate(day: dateLabel.text ?? emptyValue, formatter: Constant.noteDateFormatter)
-        )
-        if noteInfo.isEmpty == false {
+        if !noteInfo.isEmpty {
             delegate?.saveNote(noteInfo, index: noteIndex)
         }
     }
@@ -71,24 +68,24 @@ class NoteInfoViewController: UIViewController {
     @objc private func showKeyboard() {
         rightBarButton.isEnabled = true
         rightBarButton.title = doneRightButtonTitle
-        dateLabel.text = DateFormat.dateToday(day: Date(), formatter: Constant.noteDateFormatter)
+        let nowDate = Date()
+        editDate = nowDate
+        dateLabel.text = DateFormat.dateToday(day: nowDate, formatter: Constant.noteDateFormatter)
         noteInfo = Note(
             titleText: titleTextField.text ?? emptyValue,
             mainText: mainTextField.text,
-            date: DateFormat.formatterDate(day: dateLabel.text ?? emptyValue, formatter: Constant.noteDateFormatter)
+            date: nowDate
         )
     }
 
     @objc private func applicationWillTerminate(notification: Notification) {
-        var newNote: [Note] = []
-        noteInfo = Note(
-            titleText: titleTextField.text ?? emptyValue,
-            mainText: mainTextField.text,
-            date: DateFormat.formatterDate(day: dateLabel.text ?? emptyValue, formatter: Constant.noteDateFormatter)
-        )
-        newNote.append(noteInfo)
-        if noteInfo.isEmpty == false {
-            NoteStorage().saveNotes(newNote)
+        if !noteInfo.isEmpty {
+            noteInfo = Note(
+                titleText: titleTextField.text ?? emptyValue,
+                mainText: mainTextField.text,
+                date: editDate
+            )
+            NoteStorage().saveNotes([noteInfo])
         }
     }
 
@@ -104,15 +101,10 @@ class NoteInfoViewController: UIViewController {
     @objc private func didRightBarButtonTapped(_ sender: Any) {
         noteInfo.titleText = titleTextField.text ?? emptyValue
         noteInfo.mainText = mainTextField.text
-        if checkEmptyStroke() == false {
+        if !checkEmptyStroke() {
             self.view.endEditing(true)
             rightBarButton.isEnabled = false
             rightBarButton.title?.removeAll()
-            noteInfo = Note(
-                titleText: titleTextField.text ?? emptyValue,
-                mainText: mainTextField.text,
-                date: Date()
-            )
         }
     }
 
@@ -184,7 +176,6 @@ class NoteInfoViewController: UIViewController {
             dateLabel.topAnchor.constraint(equalTo: mainContainer.topAnchor),
             dateLabel.heightAnchor.constraint(equalToConstant: 40.0)
         ])
-
         dateLabel.text = "\(DateFormat.dateToday(day: noteInfo.date ?? Date(), formatter: Constant.noteDateFormatter))"
         dateLabel.textAlignment = .center
         dateLabel.font = .systemFont(ofSize: 14, weight: .medium)

@@ -18,9 +18,9 @@ class ListViewController: UIViewController {
     private let doneRightButtonTitle = "Готово"
     private let emptyValue = ""
 
-    var notes: [Note] = [] {
+    var savedNotes: [Note] = [] {
         didSet {
-            notes = notes.sorted(by: { $0.date ?? Date() > $1.date ?? Date() })
+            savedNotes = savedNotes.sorted(by: { $0.date ?? Date() > $1.date ?? Date() })
            }
     }
 
@@ -37,7 +37,11 @@ class ListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+<<<<<<< Updated upstream
         notes = NoteStorage().loadNotes()
+=======
+        savedNotes = NoteStorage().loadNotes()
+>>>>>>> Stashed changes
         fetchNotes()
 
         self.view.backgroundColor = UIColor(named: Constant.screenBackgroundColor)
@@ -143,7 +147,7 @@ class ListViewController: UIViewController {
                 present(action, animated: true)
             } else {
                 deleteRowsButtonAnimation()
-                NoteStorage().saveNotes(notes)
+                NoteStorage().saveNotes(savedNotes)
             }
         } else {
             pushVCButtonAnimation()
@@ -156,7 +160,7 @@ extension ListViewController: UITableViewDataSource {
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        notes.count
+        savedNotes.count
     }
 
     func tableView(
@@ -167,7 +171,7 @@ extension ListViewController: UITableViewDataSource {
             withIdentifier: NoteCell.cellIdentifier,
             for: indexPath
         ) as? NoteCell {
-            cell.configure(note: notes[indexPath.row])
+            cell.configure(note: savedNotes[indexPath.row])
             cell.selectionStyle = .none
             return cell
         }
@@ -180,8 +184,8 @@ extension ListViewController: UITableViewDataSource {
         forRowAt indexPath: IndexPath
     ) {
         if editingStyle == .delete {
-            notes.remove(at: indexPath.row)
-            NoteStorage().saveNotes(notes)
+            savedNotes.remove(at: indexPath.row)
+            NoteStorage().saveNotes(savedNotes)
             tableView.deleteRows(at: [indexPath], with: .right)
             tableView.reloadData()
         }
@@ -203,26 +207,28 @@ extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView.isEditing {
             indices.append(indexPath.row)
+            tableView.cellForRow(at: indexPath)?.setSelected(true, animated: true)
         } else {
             let noteVC = NoteInfoViewController()
             noteVC.delegate = self
-            noteVC.noteInfo = notes[indexPath.row]
+            noteVC.noteInfo = savedNotes[indexPath.row]
             noteVC.noteIndex = indexPath.row
-            notes.remove(at: indexPath.row)
+            savedNotes.remove(at: indexPath.row)
             self.navigationController?.pushViewController(noteVC, animated: true)
         }
     }
 
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         indices.removeAll(where: { $0 == indexPath.row })
+        tableView.cellForRow(at: indexPath)?.setSelected(false, animated: true)
     }
 }
 
 extension ListViewController: NoteInfoViewControllerDelegate {
     func saveNote(_ note: Note, index: Int) {
-        self.notes.insert(note, at: index)
+        self.savedNotes.insert(note, at: index)
         self.tableView.reloadData()
-        NoteStorage().saveNotes(notes)
+        NoteStorage().saveNotes(savedNotes)
     }
 }
 
@@ -295,7 +301,7 @@ extension ListViewController {
             animations: { [weak self] in
                 guard let self = self else { return }
                 self.indices.forEach({
-                    self.notes.remove(at: $0)
+                    self.savedNotes.remove(at: $0)
                     let index = IndexPath(row: $0, section: 0)
                     self.tableView.deleteRows(at: [index], with: .right)
                 })
@@ -312,6 +318,7 @@ extension ListViewController {
 
 extension ListViewController {
     private func fetchNotes() {
+<<<<<<< Updated upstream
         manager.onCompletion = { [weak self] response in
             guard let self = self else { return }
             switch response {
@@ -322,12 +329,30 @@ extension ListViewController {
                     }) {
                         self.notes += note
                     }
+=======
+        manager.fetchData { response in
+            switch response {
+            case .onSuccess(let uploadNotes):
+                DispatchQueue.main.async {
+                    uploadNotes.forEach({ note in
+                        if !self.savedNotes.contains(where: {
+                            $0.mainText == note.mainText &&
+                            $0.titleText == note.titleText &&
+                            $0.date == note.date
+                        }) {
+                            self.savedNotes.append(note)
+                        }
+                    })
+>>>>>>> Stashed changes
                     self.tableView.reloadData()
                 }
             case .onError(let error):
                 print(error)
             }
         }
+<<<<<<< Updated upstream
         manager.fetchQuote()
+=======
+>>>>>>> Stashed changes
     }
 }
