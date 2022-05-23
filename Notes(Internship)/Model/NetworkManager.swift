@@ -7,21 +7,18 @@
 
 import UIKit
 
-enum Response {
-    case onSuccess(note: [Note])
-    case onError(error: Error)
-}
-
 class NetworkManager {
-    func fetchData(onCompletion: @escaping ((Response) -> Void)) {
+    func fetchData(onCompletion: @escaping (([Note]) -> Void), onError: @escaping ((Error) -> Void)) {
         guard let url = createURLcomponents() else { return }
         URLSession.shared.dataTask(with: url) { data, _, error in
-            if let data = data {
-                if let note = self.parseJSON(withData: data) {
-                    onCompletion(.onSuccess(note: note))
+            do {
+                if let data = data {
+                    if let note = try self.parseJSON(withData: data) {
+                        onCompletion(note)
+                    }
                 }
-            } else if let error = error {
-                onCompletion(.onError(error: error))
+            } catch let error {
+                onError(error)
             }
         }.resume()
     }
@@ -39,14 +36,9 @@ class NetworkManager {
         return urlComponents.url
     }
 
-    private func parseJSON(withData data: Data) -> [Note]? {
+    private func parseJSON(withData data: Data) throws -> [Note]? {
         let decoder = JSONDecoder()
-        do {
-            let noteData = try decoder.decode([Note].self, from: data)
-            return noteData
-        } catch let error as NSError {
-            print(error)
-        }
-        return nil
+        let noteData = try decoder.decode([Note].self, from: data)
+        return noteData
     }
 }

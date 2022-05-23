@@ -18,9 +18,24 @@ struct Note: Codable {
             return false
         }
     }
+
     enum CodingKeys: String, CodingKey {
         case titleText = "header"
         case mainText = "text"
         case date = "date"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let date1 = try container.decode(Int.self, forKey: .date)
+        date = Date(timeIntervalSince1970: TimeInterval(date1))
+        titleText = try container.decode(String.self, forKey: .titleText)
+        mainText = try container.decode(String.self, forKey: .mainText)
+    }
+
+    init(titleText: String, mainText: String, date: Date?) {
+        self.mainText = mainText
+        self.titleText = titleText
+        self.date = date
     }
 }

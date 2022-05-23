@@ -33,7 +33,7 @@ class ListViewController: UIViewController {
     private var firstButtonConst: NSLayoutConstraint?
     private var secondButtonConst: NSLayoutConstraint?
 
-    private var manager = NetworkManager()
+    private let manager = NetworkManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -314,24 +314,21 @@ extension ListViewController {
 
 extension ListViewController {
     private func fetchNotes() {
-        manager.fetchData { response in
-            switch response {
-            case .onSuccess(let uploadNotes):
-                DispatchQueue.main.async {
-                    uploadNotes.forEach({ note in
-                        if !self.savedNotes.contains(where: {
-                            $0.mainText == note.mainText &&
-                            $0.titleText == note.titleText &&
-                            $0.date == note.date
-                        }) {
-                            self.savedNotes.append(note)
-                        }
-                    })
-                    self.tableView.reloadData()
-                }
-            case .onError(let error):
-                print(error)
+        manager.fetchData { uploadNotes in
+            DispatchQueue.main.async {
+                uploadNotes.forEach({ note in
+                    if !self.savedNotes.contains(where: {
+                        $0.mainText == note.mainText &&
+                        $0.titleText == note.titleText &&
+                        $0.date == note.date
+                    }) {
+                        self.savedNotes.append(note)
+                    }
+                })
+                self.tableView.reloadData()
             }
+        } onError: { error in
+            print(error)
         }
     }
 }
