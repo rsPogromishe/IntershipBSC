@@ -7,18 +7,29 @@
 
 import UIKit
 
+enum NetworkError: String, Error {
+    case failedURL = "Не удалось создать URL"
+    case emptyData = "Данные отсутствуют"
+    case parsingError = "Ошибка декодирования данных"
+}
+
 class NetworkManager {
-    func fetchData(onCompletion: @escaping (([Note]) -> Void), onError: @escaping ((Error) -> Void)) {
-        guard let url = createURLcomponents() else { return }
-        URLSession.shared.dataTask(with: url) { data, _, error in
-            do {
-                if let data = data {
+    func fetchData(onCompletion: @escaping (([Note]) -> Void), onError: @escaping ((NetworkError) -> Void)) {
+        guard let url = createURLcomponents() else {
+            onError(.failedURL)
+            return
+        }
+        URLSession.shared.dataTask(with: url) { data, _, _ in
+            if let data = data {
+                do {
                     if let note = try self.parseJSON(withData: data) {
                         onCompletion(note)
                     }
+                } catch {
+                    onError(.parsingError)
                 }
-            } catch let error {
-                onError(error)
+            } else {
+                onError(.emptyData)
             }
         }.resume()
     }

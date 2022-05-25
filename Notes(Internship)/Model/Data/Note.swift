@@ -27,8 +27,8 @@ struct Note: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let date1 = try container.decode(Int.self, forKey: .date)
-        date = Date(timeIntervalSince1970: TimeInterval(date1))
+        let dateToDecode = try container.decode(Int.self, forKey: .date)
+        date = Date(timeIntervalSince1970: TimeInterval(dateToDecode))
         titleText = try container.decode(String.self, forKey: .titleText)
         mainText = try container.decode(String.self, forKey: .mainText)
     }
