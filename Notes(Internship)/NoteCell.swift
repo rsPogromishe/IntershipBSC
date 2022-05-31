@@ -15,6 +15,7 @@ class NoteCell: UITableViewCell {
     private let textNoteLabel = UILabel()
     private let dateLabel = UILabel()
     private let editControlImage = UIImageView()
+    lazy var shareIconImage = UIImageView()
 
     private var editingMode: Bool = false
 
@@ -28,6 +29,10 @@ class NoteCell: UITableViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        print("Note cell deinited")
     }
 
     override func layoutSubviews() {
@@ -54,10 +59,12 @@ class NoteCell: UITableViewCell {
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         containerView.translatesAutoresizingMaskIntoConstraints = false
         editControlImage.translatesAutoresizingMaskIntoConstraints = false
+        shareIconImage.translatesAutoresizingMaskIntoConstraints = false
 
         containerView.addSubview(titleLabel)
         containerView.addSubview(textNoteLabel)
         containerView.addSubview(dateLabel)
+        containerView.addSubview(shareIconImage)
         contentView.addSubview(containerView)
         contentView.addSubview(editControlImage)
 
@@ -65,8 +72,6 @@ class NoteCell: UITableViewCell {
         containerLeftConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
-            contentView.heightAnchor.constraint(equalToConstant: 94.0),
-
             containerView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
@@ -86,7 +91,12 @@ class NoteCell: UITableViewCell {
             editControlImage.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 24),
             editControlImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 37),
             editControlImage.heightAnchor.constraint(equalToConstant: 16),
-            editControlImage.widthAnchor.constraint(equalToConstant: 16)
+            editControlImage.widthAnchor.constraint(equalToConstant: 16),
+
+            shareIconImage.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -16),
+            shareIconImage.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
+            shareIconImage.heightAnchor.constraint(equalToConstant: 24),
+            shareIconImage.widthAnchor.constraint(equalToConstant: 24)
         ])
     }
 
@@ -94,6 +104,19 @@ class NoteCell: UITableViewCell {
         titleLabel.text = note.titleText
         textNoteLabel.text = note.mainText
         dateLabel.text = DateFormat.dateToday(day: note.date ?? Date(), formatter: Constant.listDateFormatter)
+        if note.userShareIcon != nil {
+//            clousure, где данные модели могут быть nil
+            DispatchQueue.global().async { [weak self] in
+                guard let self = self else { return }
+                guard let imageURL = URL(string: note.userShareIcon ?? "") else { return }
+                guard let imageData = try? Data(contentsOf: imageURL) else { return }
+                DispatchQueue.main.async {
+                    self.shareIconImage.image = UIImage(data: imageData)
+                }
+            }
+        } else {
+            shareIconImage.isHidden = true
+        }
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {

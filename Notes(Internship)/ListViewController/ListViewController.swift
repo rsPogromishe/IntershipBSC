@@ -35,12 +35,18 @@ class ListViewController: UIViewController {
 
     private let manager = NetworkManager()
 
+    deinit {
+        print("ListVC deinited")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadingIndicatorView()
+
         savedNotes = NoteStorage().loadNotes()
         fetchNotes()
 
-        self.view.backgroundColor = UIColor(named: Constant.screenBackgroundColor)
+        view.backgroundColor = UIColor(named: Constant.screenBackgroundColor)
 
         setupNavigationBar()
         setupTableView()
@@ -82,10 +88,9 @@ class ListViewController: UIViewController {
                 with: addNoteButton,
                 duration: 0.5,
                 options: [.transitionFlipFromLeft],
-                animations: { [weak self] in
-                    guard let self = self else { return }
+                animations: {
                     self.addNoteButton.setImage(UIImage(named: Constant.deleteButtonImage), for: .normal)
-                }, completion: nil
+                }
             )
         } else {
             changeButtonFunctionAnimation()
@@ -229,6 +234,7 @@ extension ListViewController: NoteInfoViewControllerDelegate {
 }
 
 extension ListViewController {
+//    анимации не приводят к утечки памяти
     private func buttonAppearAnimation() {
         UIView.animate(
             withDuration: 1,
@@ -236,8 +242,7 @@ extension ListViewController {
             usingSpringWithDamping: 0.1,
             initialSpringVelocity: 10,
             options: [.layoutSubviews],
-            animations: { [weak self] in
-                guard let self = self else { return }
+            animations: {
                 self.firstButtonConst?.isActive = false
                 self.secondButtonConst = self.addNoteButton.bottomAnchor.constraint(
                     equalTo: self.view.bottomAnchor,
@@ -254,12 +259,10 @@ extension ListViewController {
             withDuration: 1,
             delay: 0,
             options: [.layoutSubviews],
-            animations: { [weak self] in
-                guard let self = self else { return }
+            animations: {
                 self.pushVCButtonAnimationKeyFrames()
             },
-            completion: { [weak self] _ in
-                guard let self = self else { return }
+            completion: { _ in
                 let newNote = NoteInfoViewController()
                 newNote.delegate = self
                 self.navigationController?.pushViewController(newNote, animated: true)
@@ -268,12 +271,10 @@ extension ListViewController {
     }
 
     private func pushVCButtonAnimationKeyFrames() {
-        UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.25) { [weak self] in
-            guard let self = self else { return }
+        UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.25) {
             self.addNoteButton.layer.position.y -= 75
         }
-        UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25) { [weak self] in
-            guard let self = self else { return }
+        UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25) {
             self.addNoteButton.layer.position.y += 500
         }
     }
@@ -284,8 +285,7 @@ extension ListViewController {
             with: addNoteButton,
             duration: 0.5,
             options: [.transitionFlipFromRight],
-            animations: { [weak self] in
-                guard let self = self else { return }
+            animations: {
                 self.addNoteButton.setImage(UIImage(named: Constant.addButtonImage), for: .normal)
             }
         )
@@ -294,33 +294,40 @@ extension ListViewController {
     private func deleteRowsButtonAnimation() {
         UIView.animate(
             withDuration: 0.5,
-            animations: { [weak self] in
-                guard let self = self else { return }
+            animations: {
                 self.indices.forEach({
                     self.savedNotes.remove(at: $0)
                     let index = IndexPath(row: $0, section: 0)
                     self.tableView.deleteRows(at: [index], with: .right)
                 })
             },
-            completion: { [weak self] _ in
-                guard let self = self else { return }
+            completion: { _ in
                 self.tableView.reloadData()
                 self.tableView.isEditing = false
                 self.changeButtonFunctionAnimation()
             }
         )
     }
+    private func loadingIndicatorView() {
+        LoadingView.startAnimating(mainView: self.view)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {
+            LoadingView.stopAnimating()
+        }
+    }
 }
 
 extension ListViewController {
     private func fetchNotes() {
-        manager.fetchData { uploadNotes in
+//      escaping clousure
+        manager.fetchData { [weak self] uploadNotes in
+            guard let self = self else { return }
             DispatchQueue.main.async {
                 uploadNotes.forEach({ note in
                     if !self.savedNotes.contains(where: {
                         $0.mainText == note.mainText &&
                         $0.titleText == note.titleText &&
-                        $0.date == note.date
+                        $0.date == note.date &&
+                        $0.userShareIcon == note.userShareIcon
                     }) {
                         self.savedNotes.append(note)
                     }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		583006D12845DFC500A42FF9 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583006D02845DFC500A42FF9 /* LoadingView.swift */; };
 		58474D8C27F9A31D00A9B289 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58474D8B27F9A31D00A9B289 /* Note.swift */; };
 		58474D8E27F9B22C00A9B289 /* DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58474D8D27F9B22C00A9B289 /* DateFormat.swift */; };
 		5874376A28117AF2009A604E /* NoteStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5874376928117AF2009A604E /* NoteStorage.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		583006D02845DFC500A42FF9 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		58474D8B27F9A31D00A9B289 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		58474D8D27F9B22C00A9B289 /* DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormat.swift; sourceTree = "<group>"; };
 		5874376928117AF2009A604E /* NoteStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteStorage.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 		58BE438E28057AE5005A2181 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				583006D02845DFC500A42FF9 /* LoadingView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -248,6 +251,7 @@
 				58BE43922805F164005A2181 /* Extensions.swift in Sources */,
 				58D41E8127EF52AB002958FC /* AppDelegate.swift in Sources */,
 				58E0D21728369222005D17C5 /* NetworkManager.swift in Sources */,
+				583006D12845DFC500A42FF9 /* LoadingView.swift in Sources */,
 				58BE439028057AF4005A2181 /* NoteCell.swift in Sources */,
 				58D41E8327EF52AB002958FC /* SceneDelegate.swift in Sources */,
 				58474D8E27F9B22C00A9B289 /* DateFormat.swift in Sources */,

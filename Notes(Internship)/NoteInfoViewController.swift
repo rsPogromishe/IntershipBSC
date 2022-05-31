@@ -12,9 +12,10 @@ protocol NoteInfoViewControllerDelegate: AnyObject {
 }
 
 class NoteInfoViewController: UIViewController {
+//    слабая ссылка на делегат для передачи данных между контроллерами
     weak var delegate: NoteInfoViewControllerDelegate?
 
-    var noteInfo = Note(titleText: "", mainText: "", date: Date())
+    var noteInfo = Note(titleText: "", mainText: "", date: Date(), userShareIcon: nil)
     var noteIndex = 0
 
     private var mainTextField = UITextView()
@@ -28,6 +29,10 @@ class NoteInfoViewController: UIViewController {
     private let emptyValue = ""
 
     private var editDate: Date?
+
+    deinit {
+        print("NoteInfoVC deinited")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,7 +79,8 @@ class NoteInfoViewController: UIViewController {
         noteInfo = Note(
             titleText: titleTextField.text ?? emptyValue,
             mainText: mainTextField.text,
-            date: nowDate
+            date: nowDate,
+            userShareIcon: nil
         )
     }
 
@@ -83,7 +89,8 @@ class NoteInfoViewController: UIViewController {
             noteInfo = Note(
                 titleText: titleTextField.text ?? emptyValue,
                 mainText: mainTextField.text,
-                date: editDate
+                date: editDate,
+                userShareIcon: nil
             )
             NoteStorage().saveNotes([noteInfo])
         }
