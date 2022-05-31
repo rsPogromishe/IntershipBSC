@@ -10,10 +10,15 @@ import UIKit
 class NoteCell: UITableViewCell {
     static let cellIdentifier = "cell"
 
-    private let conteinerView = UIView()
+    private let containerView = UIView()
     private let titleLabel = UILabel()
     private let textNoteLabel = UILabel()
     private let dateLabel = UILabel()
+    private let editControlImage = UIImageView()
+
+    private var editingMode: Bool = false
+
+    private var containerLeftConstraint: NSLayoutConstraint?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -32,10 +37,8 @@ class NoteCell: UITableViewCell {
         contentView.layer.cornerRadius = 14
         sendSubviewToBack(contentView)
 
-        conteinerView.layer.cornerRadius = 14
-        conteinerView.backgroundColor = .white
-        sendSubviewToBack(conteinerView)
-        setupCellCheckbox()
+        containerView.layer.cornerRadius = 14
+        containerView.backgroundColor = .white
     }
 
     private func setupCell() {
@@ -44,61 +47,69 @@ class NoteCell: UITableViewCell {
         textNoteLabel.font = .systemFont(ofSize: 10, weight: .medium)
         textNoteLabel.textColor = UIColor(red: 0.675, green: 0.675, blue: 0.675, alpha: 1)
         dateLabel.font = .systemFont(ofSize: 10, weight: .medium)
+        editControlImage.image = UIImage(named: Constant.deselectCellCheckbox)
 
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         textNoteLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        conteinerView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(titleLabel)
-        addSubview(textNoteLabel)
-        addSubview(dateLabel)
-        addSubview(conteinerView)
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        editControlImage.translatesAutoresizingMaskIntoConstraints = false
+
+        containerView.addSubview(titleLabel)
+        containerView.addSubview(textNoteLabel)
+        containerView.addSubview(dateLabel)
+        contentView.addSubview(containerView)
+        contentView.addSubview(editControlImage)
+
+        containerLeftConstraint = containerView.leftAnchor.constraint(equalTo: contentView.leftAnchor)
+        containerLeftConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
             contentView.heightAnchor.constraint(equalToConstant: 94.0),
 
-            conteinerView.leftAnchor.constraint(equalTo: leftAnchor),
-            conteinerView.rightAnchor.constraint(equalTo: rightAnchor),
-            conteinerView.topAnchor.constraint(equalTo: topAnchor, constant: 4),
-            conteinerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            containerView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 14),
-            titleLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
+            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            titleLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 16),
             titleLabel.heightAnchor.constraint(equalToConstant: 18.0),
 
             textNoteLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 3),
-            textNoteLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
+            textNoteLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 16),
             textNoteLabel.heightAnchor.constraint(equalToConstant: 14.0),
 
             dateLabel.topAnchor.constraint(equalTo: textNoteLabel.bottomAnchor, constant: 26),
-            dateLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
-            dateLabel.heightAnchor.constraint(equalToConstant: 10.0)
-        ])
-    }
+            dateLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 16),
+            dateLabel.heightAnchor.constraint(equalToConstant: 10.0),
 
-    private func setupCellCheckbox() {
-        for control in self.subviews {
-            if control.isMember(of: NSClassFromString("UITableViewCellEditControl") ?? AnyObject.self) {
-                for view in control.subviews {
-                    if view.isKind(of: UIImageView.self) {
-                        guard let image = view as? UIImageView else { return }
-                        if isEditing {
-                            image.frame = CGRect(x: 5, y: 7, width: 16, height: 16)
-                            if isSelected {
-                                image.image = UIImage(named: Constant.selectCellCheckbox)
-                            } else {
-                                image.image = UIImage(named: Constant.deselectCellCheckbox)
-                            }
-                        }
-                    }
-                }
-            }
-        }
+            editControlImage.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 24),
+            editControlImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 37),
+            editControlImage.heightAnchor.constraint(equalToConstant: 16),
+            editControlImage.widthAnchor.constraint(equalToConstant: 16)
+        ])
     }
 
     func configure(note: Note) {
         titleLabel.text = note.titleText
         textNoteLabel.text = note.mainText
         dateLabel.text = DateFormat.dateToday(day: note.date ?? Date(), formatter: Constant.listDateFormatter)
+    }
+
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        self.editingMode = editing
+            self.containerLeftConstraint?.constant = editing ? 44.0 : 0.0
+            UIView.animate(withDuration: 0.25) {
+                self.editControlImage.alpha = editing ? 1.0 : 0.0
+                self.contentView.layoutIfNeeded()
+            }
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        if editingMode {
+            self.editControlImage.image =
+            selected ? UIImage(named: Constant.selectCellCheckbox) : UIImage(named: Constant.deselectCellCheckbox)
+        }
     }
 }
