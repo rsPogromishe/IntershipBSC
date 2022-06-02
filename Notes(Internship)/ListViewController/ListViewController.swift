@@ -234,6 +234,7 @@ extension ListViewController: UITableViewDelegate {
 
 extension ListViewController: NoteInfoViewControllerDelegate {
     func saveNote(_ note: Note, index: Int) {
+        self.arrayOfNotes.remove(at: index)
         self.arrayOfNotes.insert(note, at: index)
         self.savedNotes.append(note)
         self.tableView.reloadData()
