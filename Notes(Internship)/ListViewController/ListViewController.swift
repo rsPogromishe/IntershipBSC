@@ -18,11 +18,13 @@ class ListViewController: UIViewController {
     private let doneRightButtonTitle = "Готово"
     private let emptyValue = ""
 
-    var savedNotes: [Note] = [] {
+    var arrayOfNotes: [Note] = [] {
         didSet {
-            savedNotes = savedNotes.sorted(by: { $0.date ?? Date() > $1.date ?? Date() })
+            arrayOfNotes = arrayOfNotes.sorted(by: { $0.date ?? Date() > $1.date ?? Date() })
            }
     }
+    private var savedNotes: [Note] = []
+    private var uploadNotes: [Note] = []
 
     private var indices: [Int] = [] {
         didSet {
@@ -44,6 +46,7 @@ class ListViewController: UIViewController {
         loadingIndicatorView()
 
         savedNotes = NoteStorage().loadNotes()
+        arrayOfNotes += savedNotes
         fetchNotes()
 
         view.backgroundColor = UIColor(named: Constant.screenBackgroundColor)
@@ -161,7 +164,7 @@ extension ListViewController: UITableViewDataSource {
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        savedNotes.count
+        arrayOfNotes.count
     }
 
     func tableView(
@@ -172,7 +175,7 @@ extension ListViewController: UITableViewDataSource {
             withIdentifier: NoteCell.cellIdentifier,
             for: indexPath
         ) as? NoteCell {
-            cell.configure(note: savedNotes[indexPath.row])
+            cell.configure(note: arrayOfNotes[indexPath.row])
             cell.selectionStyle = .none
             return cell
         }
@@ -185,7 +188,12 @@ extension ListViewController: UITableViewDataSource {
         forRowAt indexPath: IndexPath
     ) {
         if editingStyle == .delete {
-            savedNotes.remove(at: indexPath.row)
+            let note = arrayOfNotes.remove(at: indexPath.row)
+            savedNotes.removeAll(where: {
+                $0.mainText == note.mainText &&
+                $0.titleText == note.titleText &&
+                $0.date == note.date
+            })
             NoteStorage().saveNotes(savedNotes)
             tableView.deleteRows(at: [indexPath], with: .right)
             tableView.reloadData()
@@ -212,9 +220,8 @@ extension ListViewController: UITableViewDelegate {
         } else {
             let noteVC = NoteInfoViewController()
             noteVC.delegate = self
-            noteVC.noteInfo = savedNotes[indexPath.row]
+            noteVC.noteInfo = arrayOfNotes[indexPath.row]
             noteVC.noteIndex = indexPath.row
-            savedNotes.remove(at: indexPath.row)
             self.navigationController?.pushViewController(noteVC, animated: true)
         }
     }
@@ -227,7 +234,8 @@ extension ListViewController: UITableViewDelegate {
 
 extension ListViewController: NoteInfoViewControllerDelegate {
     func saveNote(_ note: Note, index: Int) {
-        self.savedNotes.insert(note, at: index)
+        self.arrayOfNotes.insert(note, at: index)
+        self.savedNotes.append(note)
         self.tableView.reloadData()
         NoteStorage().saveNotes(savedNotes)
     }
@@ -296,21 +304,27 @@ extension ListViewController {
             withDuration: 0.5,
             animations: {
                 self.indices.forEach({
-                    self.savedNotes.remove(at: $0)
+                    let note = self.arrayOfNotes.remove(at: $0)
                     let index = IndexPath(row: $0, section: 0)
                     self.tableView.deleteRows(at: [index], with: .right)
+                    self.savedNotes.removeAll(where: {
+                        $0.mainText == note.mainText &&
+                        $0.titleText == note.titleText &&
+                        $0.date == note.date
+                    })
                 })
             },
             completion: { _ in
                 self.tableView.reloadData()
                 self.tableView.isEditing = false
                 self.changeButtonFunctionAnimation()
+                NoteStorage().saveNotes(self.savedNotes)
             }
         )
     }
     private func loadingIndicatorView() {
         LoadingView.startAnimating(mainView: self.view)
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
             LoadingView.stopAnimating()
         }
     }
@@ -319,19 +333,11 @@ extension ListViewController {
 extension ListViewController {
     private func fetchNotes() {
 //      escaping clousure
-        manager.fetchData { [weak self] uploadNotes in
+        manager.fetchData { [weak self] uploadNote in
             guard let self = self else { return }
             DispatchQueue.main.async {
-                uploadNotes.forEach({ note in
-                    if !self.savedNotes.contains(where: {
-                        $0.mainText == note.mainText &&
-                        $0.titleText == note.titleText &&
-                        $0.date == note.date &&
-                        $0.userShareIcon == note.userShareIcon
-                    }) {
-                        self.savedNotes.append(note)
-                    }
-                })
+                self.uploadNotes.append(contentsOf: uploadNote)
+                self.arrayOfNotes += self.uploadNotes
                 self.tableView.reloadData()
             }
         } onError: { error in

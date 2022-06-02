@@ -16,11 +16,13 @@ class LoadingView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLoadingView()
+        print("LoadingView inited")
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupLoadingView()
+        print("LoadingView inited")
     }
 
     deinit {

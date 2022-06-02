@@ -23,11 +23,13 @@ class NoteCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        print("NoteCell inited")
 
         setupCell()
     }
 
     required init?(coder: NSCoder) {
+        print("NoteCell inited")
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -106,16 +108,16 @@ class NoteCell: UITableViewCell {
         dateLabel.text = DateFormat.dateToday(day: note.date ?? Date(), formatter: Constant.listDateFormatter)
         if note.userShareIcon != nil {
 //            clousure, где данные модели могут быть nil
-            DispatchQueue.global().async { [weak self] in
-                guard let self = self else { return }
+            DispatchQueue.global().async {
                 guard let imageURL = URL(string: note.userShareIcon ?? "") else { return }
                 guard let imageData = try? Data(contentsOf: imageURL) else { return }
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.shareIconImage.image = UIImage(data: imageData)
                 }
             }
         } else {
-            shareIconImage.isHidden = true
+            shareIconImage.image = .none
         }
     }
 

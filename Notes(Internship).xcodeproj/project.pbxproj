@@ -132,8 +132,8 @@
 				58BE438E28057AE5005A2181 /* Views */,
 				58474D8927F9A2E900A9B289 /* Controllers */,
 				58D41E8927EF52AD002958FC /* Assets.xcassets */,
-				58D41E8B27EF52AD002958FC /* LaunchScreen.storyboard */,
 				58D41E8E27EF52AD002958FC /* Info.plist */,
+				58D41E8B27EF52AD002958FC /* LaunchScreen.storyboard */,
 			);
 			path = "Notes(Internship)";
 			sourceTree = "<group>";
