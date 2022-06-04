@@ -17,7 +17,7 @@ class NoteInfoViewController: UIViewController {
 
     var noteInfo = Note(titleText: "", mainText: "", date: Date(), userShareIcon: nil)
     var noteIndex = 0
-    private var noteIsChanged = false
+    var noteIsInSaved = false
 
     private var mainTextField = UITextView()
     private var titleTextField = UITextField()
@@ -60,7 +60,7 @@ class NoteInfoViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if noteIsChanged {
+        if noteIsInSaved {
             if !noteInfo.isEmpty {
                 delegate?.saveNote(noteInfo, index: noteIndex)
             }
@@ -84,7 +84,7 @@ class NoteInfoViewController: UIViewController {
     }
 
     @objc private func showKeyboard() {
-        noteIsChanged = true
+        noteIsInSaved = true
         rightBarButton.isEnabled = true
         rightBarButton.title = doneRightButtonTitle
         let nowDate = Date()

@@ -219,9 +219,24 @@ extension ListViewController: UITableViewDelegate {
             tableView.cellForRow(at: indexPath)?.setSelected(true, animated: true)
         } else {
             let noteVC = NoteInfoViewController()
+            let note = arrayOfNotes[indexPath.row]
             noteVC.delegate = self
-            noteVC.noteInfo = arrayOfNotes[indexPath.row]
+            noteVC.noteInfo = note
             noteVC.noteIndex = indexPath.row
+
+            if savedNotes.contains(where: {
+                $0.mainText == note.mainText &&
+                $0.titleText == note.titleText &&
+                $0.date == note.date
+            }) {
+                savedNotes.removeAll(where: {
+                    $0.mainText == note.mainText &&
+                    $0.titleText == note.titleText &&
+                    $0.date == note.date
+                })
+                arrayOfNotes.remove(at: indexPath.row)
+                noteVC.noteIsInSaved = true
+            }
             self.navigationController?.pushViewController(noteVC, animated: true)
         }
     }
@@ -234,7 +249,6 @@ extension ListViewController: UITableViewDelegate {
 
 extension ListViewController: NoteInfoViewControllerDelegate {
     func saveNote(_ note: Note, index: Int) {
-        self.arrayOfNotes.remove(at: index)
         self.arrayOfNotes.insert(note, at: index)
         self.savedNotes.append(note)
         self.tableView.reloadData()
