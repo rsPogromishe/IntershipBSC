@@ -8,9 +8,9 @@
 import UIKit
 
 enum NetworkError: String, Error {
-    case failedURL = "Не удалось создать URL"
-    case emptyData = "Данные отсутствуют"
-    case parsingError = "Ошибка декодирования данных"
+    case failedURL
+    case emptyData
+    case parsingError
 }
 
 class NetworkManager {
@@ -39,10 +39,10 @@ class NetworkManager {
 
         urlComponents.scheme = "https"
         urlComponents.host = "firebasestorage.googleapis.com"
-        urlComponents.path = "/v0/b/ios-test-ce687.appspot.com/o/Empty.json"
+        urlComponents.path = "/v0/b/ios-test-ce687.appspot.com/o/lesson8.json"
         urlComponents.queryItems = [
             URLQueryItem(name: "alt", value: "media"),
-            URLQueryItem(name: "token", value: "d07f7d4a-141e-4ac5-a2d2-cc936d4e6f18")
+            URLQueryItem(name: "token", value: "215055df-172d-4b98-95a0-b353caca1424")
         ]
         return urlComponents.url
     }

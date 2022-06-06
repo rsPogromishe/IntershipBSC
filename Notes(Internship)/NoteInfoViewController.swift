@@ -12,10 +12,12 @@ protocol NoteInfoViewControllerDelegate: AnyObject {
 }
 
 class NoteInfoViewController: UIViewController {
+//    слабая ссылка на делегат для передачи данных между контроллерами
     weak var delegate: NoteInfoViewControllerDelegate?
 
-    var noteInfo = Note(titleText: "", mainText: "", date: Date())
+    var noteInfo = Note(titleText: "", mainText: "", date: Date(), userShareIcon: nil)
     var noteIndex = 0
+    var noteIsInSaved = false
 
     private var mainTextField = UITextView()
     private var titleTextField = UITextField()
@@ -28,6 +30,20 @@ class NoteInfoViewController: UIViewController {
     private let emptyValue = ""
 
     private var editDate: Date?
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        print("NoteInfoVC inited")
+    }
+
+    required init?(coder: NSCoder) {
+        print("NoteInfoVC inited")
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        print("NoteInfoVC deinited")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,8 +60,10 @@ class NoteInfoViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if !noteInfo.isEmpty {
-            delegate?.saveNote(noteInfo, index: noteIndex)
+        if noteIsInSaved {
+            if !noteInfo.isEmpty {
+                delegate?.saveNote(noteInfo, index: noteIndex)
+            }
         }
     }
 
@@ -66,6 +84,7 @@ class NoteInfoViewController: UIViewController {
     }
 
     @objc private func showKeyboard() {
+        noteIsInSaved = true
         rightBarButton.isEnabled = true
         rightBarButton.title = doneRightButtonTitle
         let nowDate = Date()
@@ -74,7 +93,8 @@ class NoteInfoViewController: UIViewController {
         noteInfo = Note(
             titleText: titleTextField.text ?? emptyValue,
             mainText: mainTextField.text,
-            date: nowDate
+            date: nowDate,
+            userShareIcon: nil
         )
     }
 
@@ -83,7 +103,8 @@ class NoteInfoViewController: UIViewController {
             noteInfo = Note(
                 titleText: titleTextField.text ?? emptyValue,
                 mainText: mainTextField.text,
-                date: editDate
+                date: editDate,
+                userShareIcon: nil
             )
             NoteStorage().saveNotes([noteInfo])
         }

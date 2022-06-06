@@ -15,6 +15,7 @@ class NoteStorage {
         case title
         case mainText
         case date
+        case userShareIcon
     }
 
     func loadNotes() -> [Note] {
@@ -25,7 +26,7 @@ class NoteStorage {
                   let text = note[NoteKey.mainText.rawValue] as? String,
                   let date = note[NoteKey.date.rawValue] as? Date
             else { continue }
-            resultNotes.append(Note(titleText: title, mainText: text, date: date))
+            resultNotes.append(Note(titleText: title, mainText: text, date: date, userShareIcon: ""))
         }
         return resultNotes
     }
