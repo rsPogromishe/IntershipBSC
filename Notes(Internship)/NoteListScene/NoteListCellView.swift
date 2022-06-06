@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NoteCell: UITableViewCell {
+class NoteListCellView: UITableViewCell {
     static let cellIdentifier = "cell"
 
     private let containerView = UIView()
@@ -102,11 +102,11 @@ class NoteCell: UITableViewCell {
         ])
     }
 
-    func configure(note: Note) {
+    func configure(note: NoteList.NoteData.ViewModel.DisplayedNote) {
         titleLabel.text = note.titleText
         textNoteLabel.text = note.mainText
         dateLabel.text = DateFormat.dateToday(day: note.date ?? Date(), formatter: Constant.listDateFormatter)
-        if note.userShareIcon != nil {
+        if note.userShareIcon != nil && note.userShareIcon != "" {
 //            clousure, где данные модели могут быть nil
             DispatchQueue.global().async {
                 guard let imageURL = URL(string: note.userShareIcon ?? "") else { return }
