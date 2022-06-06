@@ -32,7 +32,6 @@
 		58D41E8A27EF52AD002958FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58D41E8927EF52AD002958FC /* Assets.xcassets */; };
 		58D41E8D27EF52AD002958FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58D41E8B27EF52AD002958FC /* LaunchScreen.storyboard */; };
 		58DF69D027FEE27100990875 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DF69CF27FEE27100990875 /* Constant.swift */; };
-		58E0D21728369222005D17C5 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58E0D21628369222005D17C5 /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,7 +62,6 @@
 		58D41E8C27EF52AD002958FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		58D41E8E27EF52AD002958FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		58DF69CF27FEE27100990875 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
-		58E0D21628369222005D17C5 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,7 +177,6 @@
 			isa = PBXGroup;
 			children = (
 				5874376928117AF2009A604E /* NoteStorage.swift */,
-				58E0D21628369222005D17C5 /* NetworkManager.swift */,
 			);
 			name = Manager;
 			sourceTree = "<group>";
@@ -285,7 +282,6 @@
 				581CC5F8284DE7B3008D5C1D /* NoteInfoRouter.swift in Sources */,
 				58D41E8127EF52AB002958FC /* AppDelegate.swift in Sources */,
 				581CC5EC284DD230008D5C1D /* NoteListModels.swift in Sources */,
-				58E0D21728369222005D17C5 /* NetworkManager.swift in Sources */,
 				581CC5EE284DD242008D5C1D /* NoteListInteractor.swift in Sources */,
 				583006D12845DFC500A42FF9 /* LoadingView.swift in Sources */,
 				58BE439028057AF4005A2181 /* NoteListCellView.swift in Sources */,

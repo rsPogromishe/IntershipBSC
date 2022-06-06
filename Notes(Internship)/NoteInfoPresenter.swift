@@ -26,7 +26,6 @@ class NoteInfoPresenter: NoteInfoPresentationLogic {
 
     func presentSaveNote(response: NoteInfo.SaveNote.Response) {
         let viewModel = NoteInfo.SaveNote.ViewModel()
-        print(viewModel)
         viewController?.displaySaveNote(viewModel: viewModel)
     }
 }

@@ -27,4 +27,17 @@ enum NoteList {
             var displayedNotes: [DisplayedNote]
         }
     }
+
+    enum DeleteNote {
+        struct Request {
+            var note: [NoteList.NoteData.ViewModel.DisplayedNote]
+        }
+
+        struct Response {
+            var notes: [Note]
+        }
+
+        struct ViewModel {
+        }
+    }
 }

@@ -11,8 +11,6 @@ class NoteListViewController: UIViewController {
     var interactor: NoteListBusinessLogic?
     var router: (NoteListRoutingLogic & NoteListDataPassing)?
 
-    private let manager = NetworkManager()
-
     var tableView = UITableView()
     private var addNoteButton = UIButton()
     private var backItem = UIBarButtonItem()
@@ -176,7 +174,6 @@ class NoteListViewController: UIViewController {
                 present(action, animated: true)
             } else {
                 deleteRowsButtonAnimation()
-//                NoteStorage().saveNotes(localNotes)
             }
         } else {
             pushVCButtonAnimation()
@@ -213,13 +210,15 @@ extension NoteListViewController: UITableViewDataSource {
         forRowAt indexPath: IndexPath
     ) {
         if editingStyle == .delete {
+            let deleteNote = arrayOfNotes[indexPath.row]
+            let request = NoteList.DeleteNote.Request(note: [deleteNote])
+            interactor?.deleteLocalNotes(request: request)
             let note = arrayOfNotes.remove(at: indexPath.row)
             localNotes.removeAll(where: {
                 $0.mainText == note.mainText &&
                 $0.titleText == note.titleText &&
                 $0.date == note.date
             })
-//            NoteStorage().saveNotes(localNotes)
             tableView.deleteRows(at: [indexPath], with: .right)
             tableView.reloadData()
         }
@@ -244,26 +243,6 @@ extension NoteListViewController: UITableViewDelegate {
             tableView.cellForRow(at: indexPath)?.setSelected(true, animated: true)
         } else {
             router?.routeToViewNote()
-//            let noteVC = NoteInfoViewController()
-//            let note = arrayOfNotes[indexPath.row]
-//            noteVC.delegate = self
-//        //    noteVC.noteInfo = note
-//            noteVC.noteIndex = indexPath.row
-//
-//            if localNotes.contains(where: {
-//                $0.mainText == note.mainText &&
-//                $0.titleText == note.titleText &&
-//                $0.date == note.date
-//            }) {
-//                localNotes.removeAll(where: {
-//                    $0.mainText == note.mainText &&
-//                    $0.titleText == note.titleText &&
-//                    $0.date == note.date
-//                })
-//                arrayOfNotes.remove(at: indexPath.row)
-//                noteVC.noteIsInSaved = true
-//            }
-//            self.navigationController?.pushViewController(noteVC, animated: true)
         }
     }
 
@@ -272,15 +251,6 @@ extension NoteListViewController: UITableViewDelegate {
         tableView.cellForRow(at: indexPath)?.setSelected(false, animated: true)
     }
 }
-
-// extension NoteListViewController: NoteInfoViewControllerDelegate {
-//    func saveNote(_ note: Note, index: Int) {
-//     //   self.arrayOfNotes.insert(note, at: index)
-//      self.localNotes.append(note)
-//        self.tableView.reloadData()
-//       NoteStorage().saveNotes(localNotes)
-//    }
-// }
 
 extension NoteListViewController {
 //    анимации не приводят к утечки памяти
@@ -351,13 +321,14 @@ extension NoteListViewController {
                         $0.titleText == note.titleText &&
                         $0.date == note.date
                     })
+                    let request = NoteList.DeleteNote.Request(note: [note])
+                    self.interactor?.deleteLocalNotes(request: request)
                 })
             },
             completion: { _ in
                 self.tableView.reloadData()
                 self.tableView.isEditing = false
                 self.changeButtonFunctionAnimation()
-//                NoteStorage().saveNotes(self.localNotes)
             }
         )
     }

@@ -26,6 +26,6 @@ class NoteListRouter: NoteListRoutingLogic, NoteListDataPassing {
 
     func passDataToNoteInfoView(source: NoteListDataStore, destination: inout NoteInfoDataStore) {
         guard let selectedRow = viewController?.tableView.indexPathForSelectedRow?.row else { return }
-        destination.note = source.notes?[selectedRow]
+        destination.note = source.notes[selectedRow]
     }
 }

@@ -35,4 +35,17 @@ class NoteListPresenter: NoteListPresentationLogic {
         let viewModel = NoteList.NoteData.ViewModel(displayedNotes: notes)
         viewController?.displayLocalNotes(viewModel: viewModel)
     }
+
+    func presentDeletedLocalNotes(response: NoteList.DeleteNote.Response) {
+        let notes = response.notes.map {
+            NoteList.NoteData.ViewModel.DisplayedNote(
+                titleText: $0.titleText,
+                mainText: $0.mainText,
+                date: $0.date,
+                userShareIcon: $0.userShareIcon
+            )
+        }
+        let viewModel = NoteList.NoteData.ViewModel(displayedNotes: notes)
+        viewController?.displayLocalNotes(viewModel: viewModel)
+    }
 }

@@ -20,6 +20,6 @@ class NoteInfoRouter: NoteInfoRoutingLogic, NoteInfoDataPassing {
 
     func passDataToNoteList(source: NoteInfoDataStore, destination: inout NoteListDataStore) {
         guard let note = source.note else { return }
-        destination.notes?.append(note)
+        destination.notes.append(note)
     }
 }
