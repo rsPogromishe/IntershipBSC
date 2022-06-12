@@ -11,7 +11,7 @@ struct Note: Codable {
     var titleText: String
     var mainText: String
     var date: Date?
-    var userShareIcon: String?
+    var userShareIcon: Data?
     var isEmpty: Bool {
         if mainText.isEmpty {
             return true
@@ -33,10 +33,13 @@ struct Note: Codable {
         date = Date(timeIntervalSince1970: TimeInterval(dateToDecode))
         titleText = try container.decode(String.self, forKey: .titleText)
         mainText = try container.decode(String.self, forKey: .mainText)
-        userShareIcon = try container.decodeIfPresent(String.self, forKey: .userShareIcon)
+        let imageToDecode = try container.decodeIfPresent(String.self, forKey: .userShareIcon) ?? ""
+        guard let imageURL = URL(string: imageToDecode) else { return }
+        guard let imageData = try? Data(contentsOf: imageURL) else { return }
+        userShareIcon = imageData
     }
 
-    init(titleText: String, mainText: String, date: Date?, userShareIcon: String?) {
+    init(titleText: String, mainText: String, date: Date?, userShareIcon: Data?) {
         self.mainText = mainText
         self.titleText = titleText
         self.date = date

@@ -25,7 +25,7 @@ class NoteStorage {
                   let text = note[NoteKey.mainText.rawValue] as? String,
                   let date = note[NoteKey.date.rawValue] as? Date
             else { continue }
-            resultNotes.append(Note(titleText: title, mainText: text, date: date, userShareIcon: ""))
+            resultNotes.append(Note(titleText: title, mainText: text, date: date, userShareIcon: nil))
         }
         return resultNotes
     }

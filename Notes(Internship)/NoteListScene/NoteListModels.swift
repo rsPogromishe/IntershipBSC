@@ -20,7 +20,7 @@ enum NoteList {
                 var titleText: String
                 var mainText: String
                 var date: Date?
-                var userShareIcon: String?
+                var userShareIcon: Data?
             }
 
             var displayedNotes: [DisplayedNote]

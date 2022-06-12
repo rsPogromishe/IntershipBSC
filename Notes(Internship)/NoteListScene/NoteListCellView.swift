@@ -106,15 +106,12 @@ class NoteListCellView: UITableViewCell {
         titleLabel.text = note.titleText
         textNoteLabel.text = note.mainText
         dateLabel.text = DateFormat.dateToday(day: note.date ?? Date(), formatter: Constant.listDateFormatter)
-        if note.userShareIcon != nil && note.userShareIcon != "" {
+        if note.userShareIcon != nil {
 //            clousure, где данные модели могут быть nil
-            DispatchQueue.global().async {
-                guard let imageURL = URL(string: note.userShareIcon ?? "") else { return }
-                guard let imageData = try? Data(contentsOf: imageURL) else { return }
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.shareIconImage.image = UIImage(data: imageData)
-                }
+            guard let imageData = note.userShareIcon else { return }
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.shareIconImage.image = UIImage(data: imageData)
             }
         } else {
             shareIconImage.image = .none
