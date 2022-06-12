@@ -5,8 +5,6 @@
 //  Created by Снытин Ростислав on 06.06.2022.
 //
 
-import UIKit
-
 protocol NoteInfoPresentationLogic {
     func presentNoteInfo(response: NoteInfo.ShowNote.Response)
     func presentSaveNote(response: NoteInfo.SaveNote.Response)
@@ -17,7 +15,7 @@ protocol NoteInfoRoutingLogic {
 }
 
 protocol NoteInfoDataPassing {
-    var dataStore: NoteInfoDataStore? { get }
+    var dataStore: NoteInfoDataStore { get }
 }
 
 protocol NoteInfoDisplayLogic: AnyObject {
@@ -32,4 +30,8 @@ protocol NoteInfoBusinessLogic {
 
 protocol NoteInfoDataStore {
     var note: Note? { get set }
+}
+
+protocol NoteInfoWorkerLogic {
+    func saveNote(note: [Note])
 }

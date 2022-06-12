@@ -34,7 +34,7 @@ class NoteListCellView: UITableViewCell {
     }
 
     deinit {
-        print("Note cell deinited")
+        print("NoteCell deinited")
     }
 
     override func layoutSubviews() {

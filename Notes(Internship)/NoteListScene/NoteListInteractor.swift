@@ -8,8 +8,8 @@
 import Foundation
 
 class NoteListInteractor: NoteListBusinessLogic, NoteListDataStore {
-    var presenter: NoteListPresenter?
-    var worker = NoteListWorker()
+    private let presenter: NoteListPresenter
+    private let worker: NoteListWorker
 
     var notes: [Note] = [] {
         didSet {
@@ -19,7 +19,12 @@ class NoteListInteractor: NoteListBusinessLogic, NoteListDataStore {
 
     var localNotes: [Note] = []
 
-    func showLocalNotes(request: NoteList.NoteData.Request) {
+    init(presenter: NoteListPresenter, worker: NoteListWorker) {
+        self.presenter = presenter
+        self.worker = worker
+    }
+
+    func getLocalNotes(request: NoteList.NoteData.Request) {
         localNotes = worker.getLocalNotes()
         localNotes.forEach { note in
             notes.removeAll(where: {
@@ -29,19 +34,19 @@ class NoteListInteractor: NoteListBusinessLogic, NoteListDataStore {
             })
         }
         self.notes += localNotes
-        let response = NoteList.NoteData.Response(notes: localNotes)
-        presenter?.presentLocalNotes(response: response)
+        let response = NoteList.NoteData.Response(notes: self.notes)
+        presenter.presentNotes(response: response)
     }
 
-    func showUploadNotes(request: NoteList.NoteData.Request) {
+    func getFetchedNotes(request: NoteList.NoteData.Request) {
         var uploadNotes: [Note] = []
         worker.fetchData { [weak self] uploadNote in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 uploadNotes.append(contentsOf: uploadNote)
-                let response = NoteList.NoteData.Response(notes: uploadNotes)
-                self.presenter?.presentUploadNotes(response: response)
                 self.notes += uploadNotes
+                let response = NoteList.NoteData.Response(notes: self.notes)
+                self.presenter.presentNotes(response: response)
             }
         } onError: { error in
             print(error)
@@ -63,7 +68,12 @@ class NoteListInteractor: NoteListBusinessLogic, NoteListDataStore {
         }
         self.notes += localNotes
         worker.saveLocalNotes(notes: localNotes)
-        let response = NoteList.DeleteNote.Response(notes: localNotes)
-        presenter?.presentDeletedLocalNotes(response: response)
+        let response = NoteList.DeleteNote.Response(notes: self.notes)
+        presenter.presentDeletedLocalNotes(response: response)
+    }
+
+    func showLoadingView(request: NoteList.LoadingView.Request) {
+        let response = NoteList.LoadingView.Response()
+        presenter.presentLoadingView(response: response)
     }
 }

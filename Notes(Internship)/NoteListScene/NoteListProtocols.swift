@@ -5,18 +5,16 @@
 //  Created by Снытин Ростислав on 06.06.2022.
 //
 
-import UIKit
-
 protocol NoteListPresentationLogic {
-    func presentUploadNotes(response: NoteList.NoteData.Response)
-    func presentLocalNotes(response: NoteList.NoteData.Response)
+    func presentNotes(response: NoteList.NoteData.Response)
     func presentDeletedLocalNotes(response: NoteList.DeleteNote.Response)
 }
 
 protocol NoteListBusinessLogic {
-    func showUploadNotes(request: NoteList.NoteData.Request)
-    func showLocalNotes(request: NoteList.NoteData.Request)
+    func getFetchedNotes(request: NoteList.NoteData.Request)
+    func getLocalNotes(request: NoteList.NoteData.Request)
     func deleteLocalNotes(request: NoteList.DeleteNote.Request)
+    func showLoadingView(request: NoteList.LoadingView.Request)
 }
 
 protocol NoteListDataStore {
@@ -24,8 +22,8 @@ protocol NoteListDataStore {
 }
 
 protocol NoteListDisplayLogic: AnyObject {
-    func displayUploadNotes(viewModel: NoteList.NoteData.ViewModel)
-    func displayLocalNotes(viewModel: NoteList.NoteData.ViewModel)
+    func displayNotes(viewModel: NoteList.NoteData.ViewModel)
+    func displayLoaderView()
 }
 
 protocol NoteListRoutingLogic {
@@ -34,5 +32,11 @@ protocol NoteListRoutingLogic {
 }
 
 protocol NoteListDataPassing {
-    var dataStore: NoteListDataStore? { get }
+    var dataStore: NoteListDataStore { get }
+}
+
+protocol NoteListWorkerLogic {
+    func getLocalNotes() -> [Note]
+    func saveLocalNotes(notes: [Note])
+    func fetchData(onCompletion: @escaping (([Note]) -> Void), onError: @escaping ((NetworkError) -> Void))
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 class NoteInfoViewController: UIViewController {
-    var interactor: NoteInfoInteractor?
+    private let interactor: NoteInfoInteractor
     var router: (NoteInfoRoutingLogic & NoteInfoDataPassing)?
 
     var noteInfo = Note(titleText: "", mainText: "", date: Date(), userShareIcon: nil)
@@ -26,10 +26,10 @@ class NoteInfoViewController: UIViewController {
 
     private var editDate: Date?
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        setup()
+    init(interactor: NoteInfoInteractor) {
+        self.interactor = interactor
         print("NoteInfoVC inited")
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -39,19 +39,6 @@ class NoteInfoViewController: UIViewController {
 
     deinit {
         print("NoteInfoVC deinited")
-    }
-
-    private func setup() {
-        let viewController = self
-        let interactor = NoteInfoInteractor()
-        let presenter = NoteInfoPresenter()
-        let router = NoteInfoRouter()
-        viewController.interactor = interactor
-        viewController.router = router
-        interactor.presenter = presenter
-        presenter.viewController = viewController
-        router.viewController = viewController
-        router.dataStore = interactor
     }
 
     override func viewDidLoad() {
@@ -78,7 +65,7 @@ class NoteInfoViewController: UIViewController {
                     mainText: noteInfo.mainText,
                     date: noteInfo.date
                 )
-                interactor?.saveNoteInfo(request: request)
+                interactor.saveNoteInfo(request: request)
             }
         }
     }
@@ -122,7 +109,7 @@ class NoteInfoViewController: UIViewController {
                     mainText: mainTextField.text,
                     date: Date()
                 )
-                interactor?.saveNoteInfo(request: request)
+                interactor.saveNoteInfo(request: request)
             }
         }
     }
@@ -251,8 +238,8 @@ extension NoteInfoViewController: NoteInfoDisplayLogic {
         router?.routeToNoteList()
     }
 
-    func showNoteInfo() {
+    private func showNoteInfo() {
         let request = NoteInfo.ShowNote.Request()
-        interactor?.showNoteInfo(request: request)
+        interactor.showNoteInfo(request: request)
     }
 }

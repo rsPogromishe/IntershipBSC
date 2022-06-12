@@ -7,19 +7,19 @@
 
 import UIKit
 
-class NoteListWorker {
+enum NetworkError: String, Error {
+    case failedURL
+    case emptyData
+    case parsingError
+}
+
+class NoteListWorker: NoteListWorkerLogic {
     func getLocalNotes() -> [Note] {
         return NoteStorage().loadNotes()
     }
 
     func saveLocalNotes(notes: [Note]) {
         NoteStorage().saveNotes(notes)
-    }
-
-    enum NetworkError: String, Error {
-        case failedURL
-        case emptyData
-        case parsingError
     }
 
     func fetchData(onCompletion: @escaping (([Note]) -> Void), onError: @escaping ((NetworkError) -> Void)) {

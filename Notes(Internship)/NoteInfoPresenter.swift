@@ -5,8 +5,6 @@
 //  Created by Снытин Ростислав on 06.06.2022.
 //
 
-import Foundation
-
 class NoteInfoPresenter: NoteInfoPresentationLogic {
     weak var viewController: NoteInfoDisplayLogic?
 

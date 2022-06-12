@@ -9,18 +9,23 @@ import UIKit
 
 class NoteListRouter: NoteListRoutingLogic, NoteListDataPassing {
     weak var viewController: NoteListViewController?
-    var dataStore: NoteListDataStore?
+    var dataStore: NoteListDataStore
+
+    init(dataStore: NoteListDataStore) {
+        self.dataStore = dataStore
+    }
 
     func routeToViewNote() {
-        let noteInfoVC = NoteInfoViewController()
-        viewController?.navigationController?.pushViewController(noteInfoVC, animated: true)
-        guard let dataStore = dataStore else { return }
+        let noteInfoVC = NoteInfoAssembly.build()
         guard var noteInfoDataStore = noteInfoVC.router?.dataStore else { return }
         passDataToNoteInfoView(source: dataStore, destination: &noteInfoDataStore)
+        if noteInfoDataStore.note != nil {
+            viewController?.navigationController?.pushViewController(noteInfoVC, animated: true)
+        }
     }
 
     func routeToAddNote() {
-        let noteInfoVC = NoteInfoViewController()
+        let noteInfoVC = NoteInfoAssembly.build()
         viewController?.navigationController?.pushViewController(noteInfoVC, animated: true)
     }
 

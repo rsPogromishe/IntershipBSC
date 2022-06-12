@@ -9,8 +9,7 @@ import Foundation
 
 enum NoteList {
     enum NoteData {
-        struct Request {
-        }
+        struct Request {}
 
         struct Response {
             var notes: [Note]
@@ -37,7 +36,14 @@ enum NoteList {
             var notes: [Note]
         }
 
-        struct ViewModel {
-        }
+        struct ViewModel {}
+    }
+
+    enum LoadingView {
+        struct Request {}
+
+        struct Response {}
+
+        struct ViewModel {}
     }
 }

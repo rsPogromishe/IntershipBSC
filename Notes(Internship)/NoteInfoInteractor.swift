@@ -8,32 +8,33 @@
 import Foundation
 
 class NoteInfoInteractor: NoteInfoBusinessLogic, NoteInfoDataStore {
-    var presenter: NoteInfoPresenter?
-    var worker = NoteInfoWorker()
+    private let presenter: NoteInfoPresenter
+    private let worker: NoteInfoWorker
     var note: Note?
 
-    func showNoteInfo(request: NoteInfo.ShowNote.Request) {
-        var currentNote: Note
+    init(presenter: NoteInfoPresenter, worker: NoteInfoWorker) {
+        self.presenter = presenter
+        self.worker = worker
+    }
 
-        if let note = self.note {
-            currentNote = note
-        } else {
-            currentNote = Note(titleText: "", mainText: "", date: Date(), userShareIcon: nil)
-            self.note = currentNote
-        }
+    func showNoteInfo(request: NoteInfo.ShowNote.Request) {
+        let currentNote: Note = note ?? Note(titleText: "", mainText: "", date: Date(), userShareIcon: nil)
         let response = NoteInfo.ShowNote.Response(note: currentNote)
-        presenter?.presentNoteInfo(response: response)
+        presenter.presentNoteInfo(response: response)
     }
 
     func saveNoteInfo(request: NoteInfo.SaveNote.Request) {
-        guard var note = note else { return }
-        note.titleText = request.titleText
-        note.mainText = request.mainText
-        note.date = request.date
+        let newNote = Note(
+            titleText: request.titleText,
+            mainText: request.mainText,
+            date: request.date,
+            userShareIcon: nil
+        )
+        note = newNote
 
-        worker.saveNote(note: note)
+        worker.saveNote(note: [newNote])
 
         let response = NoteInfo.SaveNote.Response()
-        presenter?.presentSaveNote(response: response)
+        presenter.presentSaveNote(response: response)
     }
 }

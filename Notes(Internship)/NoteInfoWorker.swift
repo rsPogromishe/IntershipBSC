@@ -7,8 +7,8 @@
 
 import Foundation
 
-class NoteInfoWorker {
-    func saveNote(note: Note) {
-        NoteStorage().saveNotes([note])
+class NoteInfoWorker: NoteInfoWorkerLogic {
+    func saveNote(note: [Note]) {
+        NoteStorage().appendNote(note)
     }
 }

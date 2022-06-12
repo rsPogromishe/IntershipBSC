@@ -9,11 +9,14 @@ import Foundation
 
 class NoteInfoRouter: NoteInfoRoutingLogic, NoteInfoDataPassing {
     weak var viewController: NoteInfoViewController?
-    var dataStore: NoteInfoDataStore?
+    var dataStore: NoteInfoDataStore
+
+    init(dataStore: NoteInfoDataStore) {
+        self.dataStore = dataStore
+    }
 
     func routeToNoteList() {
-        let noteListVC = NoteListViewController()
-        guard let dataStore = dataStore else { return }
+        let noteListVC = NoteListAssembly.build()
         guard var noteListDataStore = noteListVC.router?.dataStore else { return }
         passDataToNoteList(source: dataStore, destination: &noteListDataStore)
     }

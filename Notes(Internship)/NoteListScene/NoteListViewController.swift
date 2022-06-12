@@ -8,7 +8,7 @@
 import UIKit
 
 class NoteListViewController: UIViewController {
-    var interactor: NoteListBusinessLogic?
+    private let interactor: NoteListBusinessLogic
     var router: (NoteListRoutingLogic & NoteListDataPassing)?
 
     var tableView = UITableView()
@@ -21,13 +21,11 @@ class NoteListViewController: UIViewController {
     private let doneRightButtonTitle = "Готово"
     private let emptyValue = ""
 
-    var arrayOfNotes: [NoteList.NoteData.ViewModel.DisplayedNote] = [] {
+    private var arrayOfNotes: [NoteList.NoteData.ViewModel.DisplayedNote] = [] {
         didSet {
             arrayOfNotes = arrayOfNotes.sorted(by: { $0.date ?? Date() > $1.date ?? Date() })
            }
     }
-    private var localNotes: [NoteList.NoteData.ViewModel.DisplayedNote] = []
-    private var uploadNotes: [NoteList.NoteData.ViewModel.DisplayedNote] = []
 
     private var indices: [Int] = [] {
         didSet {
@@ -38,10 +36,10 @@ class NoteListViewController: UIViewController {
     private var firstButtonConst: NSLayoutConstraint?
     private var secondButtonConst: NSLayoutConstraint?
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        setup()
-        print("NoteList inited")
+    init(interactor: NoteListBusinessLogic) {
+        self.interactor = interactor
+        print("NoteListVC inited")
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -52,22 +50,9 @@ class NoteListViewController: UIViewController {
         print("NoteListVC deinited")
     }
 
-    private func setup() {
-        let viewController = self
-        let interactor = NoteListInteractor()
-        let presenter = NoteListPresenter()
-        let router = NoteListRouter()
-        viewController.interactor = interactor
-        viewController.router = router
-        interactor.presenter = presenter
-        presenter.viewController = viewController
-        router.viewController = viewController
-        router.dataStore = interactor
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadingIndicatorView()
+        showLoadingView()
 
         fetchNote()
 
@@ -211,16 +196,11 @@ extension NoteListViewController: UITableViewDataSource {
     ) {
         if editingStyle == .delete {
             let deleteNote = arrayOfNotes[indexPath.row]
-            let request = NoteList.DeleteNote.Request(note: [deleteNote])
-            interactor?.deleteLocalNotes(request: request)
-            let note = arrayOfNotes.remove(at: indexPath.row)
-            localNotes.removeAll(where: {
-                $0.mainText == note.mainText &&
-                $0.titleText == note.titleText &&
-                $0.date == note.date
-            })
+            arrayOfNotes.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .right)
             tableView.reloadData()
+            let request = NoteList.DeleteNote.Request(note: [deleteNote])
+            interactor.deleteLocalNotes(request: request)
         }
     }
 
@@ -316,13 +296,8 @@ extension NoteListViewController {
                     let note = self.arrayOfNotes.remove(at: $0)
                     let index = IndexPath(row: $0, section: 0)
                     self.tableView.deleteRows(at: [index], with: .right)
-                    self.localNotes.removeAll(where: {
-                        $0.mainText == note.mainText &&
-                        $0.titleText == note.titleText &&
-                        $0.date == note.date
-                    })
                     let request = NoteList.DeleteNote.Request(note: [note])
-                    self.interactor?.deleteLocalNotes(request: request)
+                    self.interactor.deleteLocalNotes(request: request)
                 })
             },
             completion: { _ in
@@ -332,41 +307,33 @@ extension NoteListViewController {
             }
         )
     }
-    private func loadingIndicatorView() {
+}
+
+extension NoteListViewController: NoteListDisplayLogic {
+    func displayNotes(viewModel: NoteList.NoteData.ViewModel) {
+        arrayOfNotes = viewModel.displayedNotes
+        tableView.reloadData()
+    }
+
+    func displayLoaderView() {
         LoadingView.startAnimating(mainView: self.view)
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
             LoadingView.stopAnimating()
         }
     }
-}
-
-extension NoteListViewController: NoteListDisplayLogic {
-    func displayLocalNotes(viewModel: NoteList.NoteData.ViewModel) {
-        localNotes = viewModel.displayedNotes
-        arrayOfNotes.forEach { note in
-            localNotes.removeAll(where: {
-                $0.mainText == note.mainText &&
-                $0.titleText == note.titleText &&
-                $0.date == note.date
-            })
-        }
-        arrayOfNotes += localNotes
-        tableView.reloadData()
-    }
-
-    func displayUploadNotes(viewModel: NoteList.NoteData.ViewModel) {
-        uploadNotes = viewModel.displayedNotes
-        arrayOfNotes += uploadNotes
-        tableView.reloadData()
-    }
 
     private func fetchNote() {
         let request = NoteList.NoteData.Request()
-        interactor?.showUploadNotes(request: request)
+        interactor.getFetchedNotes(request: request)
     }
 
     private func loadLocalNotes() {
         let request = NoteList.NoteData.Request()
-        interactor?.showLocalNotes(request: request)
+        interactor.getLocalNotes(request: request)
+    }
+
+    private func showLoadingView() {
+        let request = NoteList.LoadingView.Request()
+        interactor.showLoadingView(request: request)
     }
 }
