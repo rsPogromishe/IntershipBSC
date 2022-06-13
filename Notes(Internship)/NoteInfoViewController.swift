@@ -12,7 +12,7 @@ class NoteInfoViewController: UIViewController {
     var router: (NoteInfoRoutingLogic & NoteInfoDataPassing)?
 
     var noteInfo = Note(titleText: "", mainText: "", date: Date(), userShareIcon: nil)
-    var noteIsInSaved = false
+    var noteIsInSaved = true
 
     private var mainTextField = UITextView()
     private var titleTextField = UITextField()
@@ -232,6 +232,10 @@ extension NoteInfoViewController: NoteInfoDisplayLogic {
         mainTextField.text = viewModel.mainText
         dateLabel.text = "\(DateFormat.dateToday(day: viewModel.date ?? Date(), formatter: Constant.noteDateFormatter))"
         editDate = viewModel.date
+
+        noteInfo.titleText = viewModel.titleText
+        noteInfo.mainText = viewModel.mainText
+        noteInfo.date = viewModel.date
     }
 
     func displaySaveNote(viewModel: NoteInfo.SaveNote.ViewModel) {

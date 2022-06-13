@@ -14,11 +14,13 @@ protocol NoteListBusinessLogic {
     func getFetchedNotes(request: NoteList.NoteData.Request)
     func getLocalNotes(request: NoteList.NoteData.Request)
     func deleteLocalNotes(request: NoteList.DeleteNote.Request)
+    func deleteTapNotes(request: NoteList.DeleteNote.Request)
     func showLoadingView(request: NoteList.LoadingView.Request)
 }
 
 protocol NoteListDataStore {
     var notes: [Note] { get set }
+    var localNotes: [Note] { get set }
 }
 
 protocol NoteListDisplayLogic: AnyObject {

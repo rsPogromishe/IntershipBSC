@@ -73,6 +73,23 @@ class NoteListInteractor: NoteListBusinessLogic, NoteListDataStore {
         presenter.presentDeletedLocalNotes(response: response)
     }
 
+    func deleteTapNotes(request: NoteList.DeleteNote.Request) {
+        request.note.forEach { note in
+            localNotes.removeAll {
+                $0.mainText == note.mainText &&
+                $0.titleText == note.titleText &&
+                $0.date == note.date
+            }
+            self.notes.removeAll(where: { showNote in
+                showNote.mainText == note.mainText &&
+                showNote.titleText == note.titleText &&
+                showNote.date == note.date &&
+                showNote.userShareIcon == note.userShareIcon
+            })
+        }
+        worker.saveLocalNotes(notes: localNotes)
+    }
+
     func showLoadingView(request: NoteList.LoadingView.Request) {
         let response = NoteList.LoadingView.Response()
         presenter.presentLoadingView(response: response)

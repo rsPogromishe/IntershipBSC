@@ -223,6 +223,9 @@ extension NoteListViewController: UITableViewDelegate {
             tableView.cellForRow(at: indexPath)?.setSelected(true, animated: true)
         } else {
             router?.routeToViewNote()
+            let note = arrayOfNotes[indexPath.row]
+            let request = NoteList.DeleteNote.Request(note: [note])
+            interactor.deleteTapNotes(request: request)
         }
     }
 
