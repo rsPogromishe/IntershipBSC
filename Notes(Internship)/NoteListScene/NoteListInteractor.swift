@@ -63,7 +63,8 @@ class NoteListInteractor: NoteListBusinessLogic, NoteListDataStore {
             self.notes.removeAll(where: { showNote in
                 showNote.mainText == note.mainText &&
                 showNote.titleText == note.titleText &&
-                showNote.date == note.date
+                showNote.date == note.date &&
+                showNote.userShareIcon == note.userShareIcon
             })
         }
         self.notes += localNotes
