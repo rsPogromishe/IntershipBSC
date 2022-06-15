@@ -15,7 +15,6 @@ class NoteStorage {
         case title
         case mainText
         case date
-        case userShareIcon
     }
 
     func loadNotes() -> [Note] {
@@ -26,7 +25,7 @@ class NoteStorage {
                   let text = note[NoteKey.mainText.rawValue] as? String,
                   let date = note[NoteKey.date.rawValue] as? Date
             else { continue }
-            resultNotes.append(Note(titleText: title, mainText: text, date: date, userShareIcon: ""))
+            resultNotes.append(Note(titleText: title, mainText: text, date: date, userShareIcon: nil))
         }
         return resultNotes
     }
@@ -41,5 +40,17 @@ class NoteStorage {
             arrayForStorage.append(newElementForStorage)
         }
         storage.set(arrayForStorage, forKey: storageKey)
+    }
+
+    func appendNote(_ notes: [Note]) {
+        var notesFromStorage = storage.array(forKey: storageKey) as? [[String: Any]] ?? []
+        notes.forEach { note in
+            var newElementForStorage: [String: Any] = [:]
+            newElementForStorage[NoteKey.title.rawValue] = note.titleText
+            newElementForStorage[NoteKey.mainText.rawValue] = note.mainText
+            newElementForStorage[NoteKey.date.rawValue] = note.date
+            notesFromStorage.append(newElementForStorage)
+        }
+        storage.set(notesFromStorage, forKey: storageKey)
     }
 }

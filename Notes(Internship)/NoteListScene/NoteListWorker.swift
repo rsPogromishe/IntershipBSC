@@ -1,8 +1,8 @@
 //
-//  NetworkManager.swift
+//  NoteListWorker.swift
 //  Notes(Internship)
 //
-//  Created by Снытин Ростислав on 19.05.2022.
+//  Created by Снытин Ростислав on 06.06.2022.
 //
 
 import UIKit
@@ -13,7 +13,15 @@ enum NetworkError: String, Error {
     case parsingError
 }
 
-class NetworkManager {
+class NoteListWorker: NoteListWorkerLogic {
+    func getLocalNotes() -> [Note] {
+        return NoteStorage().loadNotes()
+    }
+
+    func saveLocalNotes(notes: [Note]) {
+        NoteStorage().saveNotes(notes)
+    }
+
     func fetchData(onCompletion: @escaping (([Note]) -> Void), onError: @escaping ((NetworkError) -> Void)) {
         guard let url = createURLcomponents() else {
             onError(.failedURL)

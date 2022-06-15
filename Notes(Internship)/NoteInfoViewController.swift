@@ -7,17 +7,12 @@
 
 import UIKit
 
-protocol NoteInfoViewControllerDelegate: AnyObject {
-    func saveNote(_ note: Note, index: Int)
-}
-
 class NoteInfoViewController: UIViewController {
-//    слабая ссылка на делегат для передачи данных между контроллерами
-    weak var delegate: NoteInfoViewControllerDelegate?
+    private let interactor: NoteInfoInteractor
+    var router: (NoteInfoRoutingLogic & NoteInfoDataPassing)?
 
     var noteInfo = Note(titleText: "", mainText: "", date: Date(), userShareIcon: nil)
-    var noteIndex = 0
-    var noteIsInSaved = false
+    var noteIsInSaved = true
 
     private var mainTextField = UITextView()
     private var titleTextField = UITextField()
@@ -31,9 +26,10 @@ class NoteInfoViewController: UIViewController {
 
     private var editDate: Date?
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    init(interactor: NoteInfoInteractor) {
+        self.interactor = interactor
         print("NoteInfoVC inited")
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -56,13 +52,20 @@ class NoteInfoViewController: UIViewController {
         setupMainTextView()
 
         addObservers()
+
+        showNoteInfo()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if noteIsInSaved {
             if !noteInfo.isEmpty {
-                delegate?.saveNote(noteInfo, index: noteIndex)
+                let request = NoteInfo.SaveNote.Request(
+                    titleText: noteInfo.titleText,
+                    mainText: noteInfo.mainText,
+                    date: noteInfo.date
+                )
+                interactor.saveNoteInfo(request: request)
             }
         }
     }
@@ -99,14 +102,15 @@ class NoteInfoViewController: UIViewController {
     }
 
     @objc private func applicationWillTerminate(notification: Notification) {
-        if !noteInfo.isEmpty {
-            noteInfo = Note(
-                titleText: titleTextField.text ?? emptyValue,
-                mainText: mainTextField.text,
-                date: editDate,
-                userShareIcon: nil
-            )
-            NoteStorage().saveNotes([noteInfo])
+        if noteIsInSaved {
+            if !noteInfo.isEmpty {
+                let request = NoteInfo.SaveNote.Request(
+                    titleText: titleTextField.text ?? "",
+                    mainText: mainTextField.text,
+                    date: Date()
+                )
+                interactor.saveNoteInfo(request: request)
+            }
         }
     }
 
@@ -161,7 +165,6 @@ class NoteInfoViewController: UIViewController {
         titleTextField.adjustsFontSizeToFitWidth = false
         titleTextField.font = .systemFont(ofSize: 24.0, weight: .medium)
         titleTextField.placeholder = placeholderTitleTextField
-        titleTextField.text = noteInfo.titleText
     }
 
     private func setupMainTextView() {
@@ -174,7 +177,6 @@ class NoteInfoViewController: UIViewController {
             mainTextField.bottomAnchor.constraint(equalTo: mainContainer.bottomAnchor)
         ])
         mainTextField.font = .systemFont(ofSize: 16.0, weight: .regular)
-        mainTextField.text = noteInfo.mainText
         mainTextField.backgroundColor = UIColor(named: Constant.screenBackgroundColor)
         mainTextField.adjustableForKeyboard()
 
@@ -197,7 +199,6 @@ class NoteInfoViewController: UIViewController {
             dateLabel.topAnchor.constraint(equalTo: mainContainer.topAnchor),
             dateLabel.heightAnchor.constraint(equalToConstant: 40.0)
         ])
-        dateLabel.text = "\(DateFormat.dateToday(day: noteInfo.date ?? Date(), formatter: Constant.noteDateFormatter))"
         dateLabel.textAlignment = .center
         dateLabel.font = .systemFont(ofSize: 14, weight: .medium)
         dateLabel.textColor = UIColor(red: 172 / 255, green: 172 / 255, blue: 172 / 255, alpha: 1)
@@ -222,5 +223,27 @@ extension NoteInfoViewController {
         } else {
             return false
         }
+    }
+}
+
+extension NoteInfoViewController: NoteInfoDisplayLogic {
+    func displayNoteInfo(viewModel: NoteInfo.ShowNote.ViewModel) {
+        titleTextField.text = viewModel.titleText
+        mainTextField.text = viewModel.mainText
+        dateLabel.text = "\(DateFormat.dateToday(day: viewModel.date ?? Date(), formatter: Constant.noteDateFormatter))"
+        editDate = viewModel.date
+
+        noteInfo.titleText = viewModel.titleText
+        noteInfo.mainText = viewModel.mainText
+        noteInfo.date = viewModel.date
+    }
+
+    func displaySaveNote(viewModel: NoteInfo.SaveNote.ViewModel) {
+        router?.routeToNoteList()
+    }
+
+    private func showNoteInfo() {
+        let request = NoteInfo.ShowNote.Request()
+        interactor.showNoteInfo(request: request)
     }
 }

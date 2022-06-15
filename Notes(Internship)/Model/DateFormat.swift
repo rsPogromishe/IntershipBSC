@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 class DateFormat {
     static func dateToday(day: Date, formatter: String) -> String {

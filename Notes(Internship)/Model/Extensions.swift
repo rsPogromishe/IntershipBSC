@@ -5,7 +5,6 @@
 //  Created by Снытин Ростислав on 12.04.2022.
 //
 
-import Foundation
 import UIKit
 
 extension UITextView {
