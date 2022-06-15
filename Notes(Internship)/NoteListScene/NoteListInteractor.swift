@@ -8,8 +8,8 @@
 import Foundation
 
 class NoteListInteractor: NoteListBusinessLogic, NoteListDataStore {
-    private let presenter: NoteListPresenter
-    private let worker: NoteListWorker
+    private let presenter: NoteListPresentationLogic
+    private let worker: NoteListWorkerLogic
 
     var notes: [Note] = [] {
         didSet {
@@ -19,7 +19,7 @@ class NoteListInteractor: NoteListBusinessLogic, NoteListDataStore {
 
     var localNotes: [Note] = []
 
-    init(presenter: NoteListPresenter, worker: NoteListWorker) {
+    init(presenter: NoteListPresentationLogic, worker: NoteListWorkerLogic) {
         self.presenter = presenter
         self.worker = worker
     }

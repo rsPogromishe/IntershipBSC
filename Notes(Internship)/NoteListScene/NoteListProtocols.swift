@@ -8,6 +8,7 @@
 protocol NoteListPresentationLogic {
     func presentNotes(response: NoteList.NoteData.Response)
     func presentDeletedLocalNotes(response: NoteList.DeleteNote.Response)
+    func presentLoadingView(response: NoteList.LoadingView.Response)
 }
 
 protocol NoteListBusinessLogic {

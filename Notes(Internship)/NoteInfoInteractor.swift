@@ -8,11 +8,11 @@
 import Foundation
 
 class NoteInfoInteractor: NoteInfoBusinessLogic, NoteInfoDataStore {
-    private let presenter: NoteInfoPresenter
-    private let worker: NoteInfoWorker
+    private let presenter: NoteInfoPresentationLogic
+    private let worker: NoteInfoWorkerLogic
     var note: Note?
 
-    init(presenter: NoteInfoPresenter, worker: NoteInfoWorker) {
+    init(presenter: NoteInfoPresentationLogic, worker: NoteInfoWorkerLogic) {
         self.presenter = presenter
         self.worker = worker
     }
