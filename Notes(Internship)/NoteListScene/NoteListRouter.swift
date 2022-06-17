@@ -20,6 +20,13 @@ class NoteListRouter: NoteListRoutingLogic, NoteListDataPassing {
         guard var noteInfoDataStore = noteInfoVC.router?.dataStore else { return }
         passDataToNoteInfoView(source: dataStore, destination: &noteInfoDataStore)
         if noteInfoDataStore.note != nil {
+            if !dataStore.localNotes.contains(where: { note in
+                noteInfoDataStore.note?.mainText == note.mainText &&
+                noteInfoDataStore.note?.titleText == note.titleText &&
+                noteInfoDataStore.note?.date == note.date
+            }) {
+                noteInfoVC.noteIsInSaved = false
+            }
             viewController?.navigationController?.pushViewController(noteInfoVC, animated: true)
         }
     }

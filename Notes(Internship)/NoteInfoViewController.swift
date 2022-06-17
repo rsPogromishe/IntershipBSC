@@ -8,7 +8,7 @@
 import UIKit
 
 class NoteInfoViewController: UIViewController {
-    private let interactor: NoteInfoInteractor
+    private let interactor: NoteInfoBusinessLogic
     var router: (NoteInfoRoutingLogic & NoteInfoDataPassing)?
 
     var noteInfo = Note(titleText: "", mainText: "", date: Date(), userShareIcon: nil)
@@ -26,7 +26,7 @@ class NoteInfoViewController: UIViewController {
 
     private var editDate: Date?
 
-    init(interactor: NoteInfoInteractor) {
+    init(interactor: NoteInfoBusinessLogic) {
         self.interactor = interactor
         print("NoteInfoVC inited")
         super.init(nibName: nil, bundle: nil)

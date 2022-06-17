@@ -28,6 +28,18 @@
 		58BE438D280579D9005A2181 /* NoteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BE438C280579D9005A2181 /* NoteListViewController.swift */; };
 		58BE439028057AF4005A2181 /* NoteListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BE438F28057AF4005A2181 /* NoteListCellView.swift */; };
 		58BE43922805F164005A2181 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BE43912805F164005A2181 /* Extensions.swift */; };
+		58C308D92859B11400927818 /* Notes_Internship_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C308D82859B11400927818 /* Notes_Internship_Tests.swift */; };
+		58C308E42859B3ED00927818 /* NoteListPresenterMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C308E32859B3ED00927818 /* NoteListPresenterMock.swift */; };
+		58C308E82859B70700927818 /* NoteListWorkerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C308E72859B70700927818 /* NoteListWorkerMock.swift */; };
+		58C308EA2859BCF400927818 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C308E92859BCF400927818 /* TestData.swift */; };
+		58C308EC2859BF8A00927818 /* NoteListInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C308EB2859BF8A00927818 /* NoteListInteractorTests.swift */; };
+		58C308EE2859DC4200927818 /* NoteListPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C308ED2859DC4200927818 /* NoteListPresenterTests.swift */; };
+		58C308F02859DDCF00927818 /* NoteListViewControllerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C308EF2859DDCF00927818 /* NoteListViewControllerMock.swift */; };
+		58C308F62859E47A00927818 /* NoteInfoPresenterMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C308F52859E47A00927818 /* NoteInfoPresenterMock.swift */; };
+		58C308F82859E48B00927818 /* NoteInfoWorkerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C308F72859E48B00927818 /* NoteInfoWorkerMock.swift */; };
+		58C308FA2859E49A00927818 /* NoteInfoViewControllerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C308F92859E49A00927818 /* NoteInfoViewControllerMock.swift */; };
+		58C308FC2859E68900927818 /* NoteInfoInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C308FB2859E68900927818 /* NoteInfoInteractorTests.swift */; };
+		58C308FE2859E95300927818 /* NoteInfoPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C308FD2859E95300927818 /* NoteInfoPresenterTests.swift */; };
 		58D41E8127EF52AB002958FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D41E8027EF52AB002958FC /* AppDelegate.swift */; };
 		58D41E8327EF52AB002958FC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D41E8227EF52AB002958FC /* SceneDelegate.swift */; };
 		58D41E8527EF52AB002958FC /* NoteInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D41E8427EF52AB002958FC /* NoteInfoViewController.swift */; };
@@ -35,6 +47,16 @@
 		58D41E8D27EF52AD002958FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58D41E8B27EF52AD002958FC /* LaunchScreen.storyboard */; };
 		58DF69D027FEE27100990875 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DF69CF27FEE27100990875 /* Constant.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		58C308DA2859B11400927818 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 58D41E7527EF52AB002958FC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 58D41E7C27EF52AB002958FC;
+			remoteInfo = "Notes(Internship)";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		581CC5E5284DD14A008D5C1D /* NoteListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NoteListPresenter.swift; path = "Notes(Internship)/NoteListPresenter.swift"; sourceTree = SOURCE_ROOT; };
@@ -58,6 +80,19 @@
 		58BE438C280579D9005A2181 /* NoteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListViewController.swift; sourceTree = "<group>"; };
 		58BE438F28057AF4005A2181 /* NoteListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListCellView.swift; sourceTree = "<group>"; };
 		58BE43912805F164005A2181 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		58C308D62859B11400927818 /* Notes(Internship)Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Notes(Internship)Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		58C308D82859B11400927818 /* Notes_Internship_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes_Internship_Tests.swift; sourceTree = "<group>"; };
+		58C308E32859B3ED00927818 /* NoteListPresenterMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListPresenterMock.swift; sourceTree = "<group>"; };
+		58C308E72859B70700927818 /* NoteListWorkerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListWorkerMock.swift; sourceTree = "<group>"; };
+		58C308E92859BCF400927818 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
+		58C308EB2859BF8A00927818 /* NoteListInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListInteractorTests.swift; sourceTree = "<group>"; };
+		58C308ED2859DC4200927818 /* NoteListPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListPresenterTests.swift; sourceTree = "<group>"; };
+		58C308EF2859DDCF00927818 /* NoteListViewControllerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListViewControllerMock.swift; sourceTree = "<group>"; };
+		58C308F52859E47A00927818 /* NoteInfoPresenterMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteInfoPresenterMock.swift; sourceTree = "<group>"; };
+		58C308F72859E48B00927818 /* NoteInfoWorkerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteInfoWorkerMock.swift; sourceTree = "<group>"; };
+		58C308F92859E49A00927818 /* NoteInfoViewControllerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteInfoViewControllerMock.swift; sourceTree = "<group>"; };
+		58C308FB2859E68900927818 /* NoteInfoInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteInfoInteractorTests.swift; sourceTree = "<group>"; };
+		58C308FD2859E95300927818 /* NoteInfoPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteInfoPresenterTests.swift; sourceTree = "<group>"; };
 		58D41E7D27EF52AB002958FC /* Notes(Internship).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Notes(Internship).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		58D41E8027EF52AB002958FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		58D41E8227EF52AB002958FC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -69,6 +104,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		58C308D32859B11400927818 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		58D41E7A27EF52AB002958FC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -147,10 +189,71 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
+		58C308D72859B11400927818 /* Notes(Internship)Tests */ = {
+			isa = PBXGroup;
+			children = (
+				58C308D82859B11400927818 /* Notes_Internship_Tests.swift */,
+				58C308E92859BCF400927818 /* TestData.swift */,
+				58C308DF2859B31C00927818 /* Scenes */,
+			);
+			path = "Notes(Internship)Tests";
+			sourceTree = "<group>";
+		};
+		58C308DF2859B31C00927818 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				58C308F32859E44F00927818 /* NoteInfoSceneTests */,
+				58C308E02859B32700927818 /* NoteListSceneTests */,
+			);
+			name = Scenes;
+			sourceTree = "<group>";
+		};
+		58C308E02859B32700927818 /* NoteListSceneTests */ = {
+			isa = PBXGroup;
+			children = (
+				58C308EB2859BF8A00927818 /* NoteListInteractorTests.swift */,
+				58C308ED2859DC4200927818 /* NoteListPresenterTests.swift */,
+				58C308E12859B33800927818 /* Mock */,
+			);
+			path = NoteListSceneTests;
+			sourceTree = "<group>";
+		};
+		58C308E12859B33800927818 /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				58C308E32859B3ED00927818 /* NoteListPresenterMock.swift */,
+				58C308E72859B70700927818 /* NoteListWorkerMock.swift */,
+				58C308EF2859DDCF00927818 /* NoteListViewControllerMock.swift */,
+			);
+			name = Mock;
+			sourceTree = "<group>";
+		};
+		58C308F32859E44F00927818 /* NoteInfoSceneTests */ = {
+			isa = PBXGroup;
+			children = (
+				58C308FB2859E68900927818 /* NoteInfoInteractorTests.swift */,
+				58C308FD2859E95300927818 /* NoteInfoPresenterTests.swift */,
+				58C308F42859E46200927818 /* Mock */,
+			);
+			name = NoteInfoSceneTests;
+			path = NoteListSceneTests;
+			sourceTree = "<group>";
+		};
+		58C308F42859E46200927818 /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				58C308F52859E47A00927818 /* NoteInfoPresenterMock.swift */,
+				58C308F72859E48B00927818 /* NoteInfoWorkerMock.swift */,
+				58C308F92859E49A00927818 /* NoteInfoViewControllerMock.swift */,
+			);
+			name = Mock;
+			sourceTree = "<group>";
+		};
 		58D41E7427EF52AB002958FC = {
 			isa = PBXGroup;
 			children = (
 				58D41E7F27EF52AB002958FC /* Notes(Internship) */,
+				58C308D72859B11400927818 /* Notes(Internship)Tests */,
 				58D41E7E27EF52AB002958FC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -159,6 +262,7 @@
 			isa = PBXGroup;
 			children = (
 				58D41E7D27EF52AB002958FC /* Notes(Internship).app */,
+				58C308D62859B11400927818 /* Notes(Internship)Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -190,6 +294,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		58C308D52859B11400927818 /* Notes(Internship)Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 58C308DE2859B11400927818 /* Build configuration list for PBXNativeTarget "Notes(Internship)Tests" */;
+			buildPhases = (
+				58C308D22859B11400927818 /* Sources */,
+				58C308D32859B11400927818 /* Frameworks */,
+				58C308D42859B11400927818 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				58C308DB2859B11400927818 /* PBXTargetDependency */,
+			);
+			name = "Notes(Internship)Tests";
+			productName = "Notes(Internship)Tests";
+			productReference = 58C308D62859B11400927818 /* Notes(Internship)Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		58D41E7C27EF52AB002958FC /* Notes(Internship) */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 58D41E9127EF52AD002958FC /* Build configuration list for PBXNativeTarget "Notes(Internship)" */;
@@ -218,6 +340,10 @@
 				LastSwiftUpdateCheck = 1320;
 				LastUpgradeCheck = 1320;
 				TargetAttributes = {
+					58C308D52859B11400927818 = {
+						CreatedOnToolsVersion = 13.2.1;
+						TestTargetID = 58D41E7C27EF52AB002958FC;
+					};
 					58D41E7C27EF52AB002958FC = {
 						CreatedOnToolsVersion = 13.2.1;
 					};
@@ -237,11 +363,19 @@
 			projectRoot = "";
 			targets = (
 				58D41E7C27EF52AB002958FC /* Notes(Internship) */,
+				58C308D52859B11400927818 /* Notes(Internship)Tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		58C308D42859B11400927818 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		58D41E7B27EF52AB002958FC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -274,6 +408,25 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		58C308D22859B11400927818 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				58C308FE2859E95300927818 /* NoteInfoPresenterTests.swift in Sources */,
+				58C308EC2859BF8A00927818 /* NoteListInteractorTests.swift in Sources */,
+				58C308E42859B3ED00927818 /* NoteListPresenterMock.swift in Sources */,
+				58C308F62859E47A00927818 /* NoteInfoPresenterMock.swift in Sources */,
+				58C308FC2859E68900927818 /* NoteInfoInteractorTests.swift in Sources */,
+				58C308F82859E48B00927818 /* NoteInfoWorkerMock.swift in Sources */,
+				58C308D92859B11400927818 /* Notes_Internship_Tests.swift in Sources */,
+				58C308F02859DDCF00927818 /* NoteListViewControllerMock.swift in Sources */,
+				58C308FA2859E49A00927818 /* NoteInfoViewControllerMock.swift in Sources */,
+				58C308EA2859BCF400927818 /* TestData.swift in Sources */,
+				58C308EE2859DC4200927818 /* NoteListPresenterTests.swift in Sources */,
+				58C308E82859B70700927818 /* NoteListWorkerMock.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		58D41E7927EF52AB002958FC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -308,6 +461,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		58C308DB2859B11400927818 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 58D41E7C27EF52AB002958FC /* Notes(Internship) */;
+			targetProxy = 58C308DA2859B11400927818 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		58D41E8B27EF52AD002958FC /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -320,6 +481,42 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		58C308DC2859B11400927818 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9795PC2KY3;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "aGRos.Notes-Internship-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Notes(Internship).app/Notes(Internship)";
+			};
+			name = Debug;
+		};
+		58C308DD2859B11400927818 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9795PC2KY3;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "aGRos.Notes-Internship-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Notes(Internship).app/Notes(Internship)";
+			};
+			name = Release;
+		};
 		58D41E8F27EF52AD002958FC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -493,6 +690,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		58C308DE2859B11400927818 /* Build configuration list for PBXNativeTarget "Notes(Internship)Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				58C308DC2859B11400927818 /* Debug */,
+				58C308DD2859B11400927818 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		58D41E7827EF52AB002958FC /* Build configuration list for PBXProject "Notes(Internship)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
